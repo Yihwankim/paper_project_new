@@ -21,7 +21,7 @@ import datetime
 import numpy as np
 
 ########################################################################################################################
-df_hedonic = pd.read_excel('real_transaction2/Seoul_index.xlsx', header=0, skipfooter=0)
+df_hedonic = pd.read_excel('data_process/apt_data/Seoul_index.xlsx', header=0, skipfooter=0)
 
 df = df_hedonic
 
@@ -367,7 +367,7 @@ df_hedonic_time[['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D
 
 df_hedonic_time[['lat', 'long']] = df[['위도', '경도']]
 
-df_hedonic_time.to_excel('real_transaction2/seoul_full_variable.xlsx', index=False)
+df_hedonic_time.to_excel('data_process/apt_data/seoul_full_variable.xlsx', index=False)
 
 for i in tqdm(range(length1)):
     num = df_hedonic_time['D' + str(i+1)] == 1
@@ -377,14 +377,14 @@ for i in tqdm(range(length1)):
                                'Efficiency', 'dist_elem', 'dist_middle', 'dist_high', 'dist_sub', 'dist_park', 'G1',
                                'G2', 'G3', 'G4', 'G5', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10',
                                'S11', 'lat', 'long']]
-    df_quarterly.to_excel('real_transaction2/quarterly/seoul_apt' + str(i+1) + '.xlsx')
+    df_quarterly.to_excel('data_process/quarterly_edit/seoul_apt' + str(i+1) + '.xlsx')
 #####################################################################################################################
 for i in tqdm(range(length1)):
-    df_q = pd.read_excel('real_transaction2/quarterly/seoul_apt' + str(i+1) + '.xlsx', header=0, skipfooter=0)
+    df_q = pd.read_excel('real_transaction2/quarterly_edit/seoul_apt' + str(i+1) + '.xlsx', header=0, skipfooter=0)
     df = df_q[['gu', 'dong', 'per_Pr', 'year', 'year_sq', 'num', 'car', 'car_per', 'area', 'room', 'toilet', 'floor',
                'floor_sq', 'H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'C1', 'FAR', 'BC', 'Efficiency',
                'dist_elem', 'dist_middle', 'dist_high', 'dist_sub', 'dist_park', 'G1', 'G2', 'G3', 'G4', 'G5', 'S1',
                'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'lat', 'long']]
-    df.to_excel('real_transaction2/quarterly_edit/seoul_apt' + str(i+1) + '.xlsx')
+    df.to_excel('data_process/quarterly_edit/seoul_apt' + str(i+1) + '.xlsx')
 
 

@@ -28,7 +28,7 @@ dfs = []
 for fname in filenames_GB:
     print('Loading {}'.format(fname))
 
-    df = pd.read_excel('Gangbuk_edit4/{}.xlsx'.format(fname))
+    df = pd.read_excel('data_process/Gangbuk_edit4/{}.xlsx'.format(fname))
     # df.columns = [fname]
 
     dfs.append(df)
@@ -52,7 +52,7 @@ dfs2 = []
 for fname in filenames_GN:
     print('Loading {}'.format(fname))
 
-    df = pd.read_excel('Gangnam_edit4/{}.xlsx'.format(fname))
+    df = pd.read_excel('data_process/Gangnam_edit4/{}.xlsx'.format(fname))
     # df.columns = [fname]
 
     dfs2.append(df)
@@ -65,11 +65,11 @@ df_GN = pd.concat(dfs2, axis=0)  # axis=0 : 밑으로 붙이기
 
 # 강북데이터와 강남데이터를 각각 edit4 폴더에 새롭게 저장한 후 합치기
 
-df_GB.to_excel('Gangbuk_edit4/Gangbuk_total.xlsx', sheet_name='Gangbuk', index=False)
-df_GN.to_excel('Gangnam_edit4/Gangnam_total.xlsx', sheet_name='Gangnam', index=False)
+df_GB.to_excel('data_process/apt_data/Gangbuk_total.xlsx', sheet_name='Gangbuk', index=False)
+df_GN.to_excel('data_process/apt_data/Gangnam_total.xlsx', sheet_name='Gangnam', index=False)
 
-df_GB = pd.read_excel('Gangbuk_edit4/Gangbuk_total.xlsx', header=0, skipfooter=0)
-df_GN = pd.read_excel('Gangnam_edit4/Gangnam_total.xlsx', header=0, skipfooter=0)
+df_GB = pd.read_excel('data_process/apt_data/Gangbuk_total.xlsx', header=0, skipfooter=0)
+df_GN = pd.read_excel('data_process/apt_data/Gangnam_total.xlsx', header=0, skipfooter=0)
 
 
 df_seoul = pd.concat([df_GB, df_GN], axis=0)
@@ -171,6 +171,6 @@ df = df[['지역구', '법정동', '아파트', '아파트코드', '사용승인
          '공급면적(㎡)', '전용면적(㎡)', '전용률(%)', '방 개수',
          '화장실 개수']]
 
-df.to_excel('Seoul.xlsx', sheet_name='total', index=False)
+df.to_excel('data_process/apt_data/Seoul.xlsx', sheet_name='total', index=False)
 
 

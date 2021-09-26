@@ -99,7 +99,7 @@ for yyyymm in list_yyyymm:
         df_apt = get_apt_data(LAWD_CD=lawd_cd, DEAL_YMD=yyyymm, serviceKey=serviceKey_YKim)
         # df_apt.to_pickle("./data_raw/df_apt_" + str(yyyymm) + "_" + str(lawd_cd) + ".pkl")
         df_dataset = pd.concat([df_dataset, df_apt])
-    df_dataset.to_pickle("./data_raw/df_dataset_" + str(yyyymm) + ".pkl")
+    df_dataset.to_pickle("./data_raw/real_transaction_data/df_dataset_" + str(yyyymm) + ".pkl")
 
 # StopWatch: 코드 종료
 time_this_code_end = datetime.now()
@@ -107,11 +107,11 @@ print("This code finished at: " + str(time_this_code_end))
 print("Elapsed (in this code): " + str(time_this_code_end - time_this_code_start))
 
 ########################################################################################################################
-data04 = pd.read_pickle('data_raw/df_dataset_201707.pkl')
+data04 = pd.read_pickle('./data_raw/real_transaction_data/df_dataset_201707.pkl')
 
-data05 = pd.read_pickle('data_raw/df_dataset_201708.pkl')
+data05 = pd.read_pickle('./data_raw/real_transaction_data/df_dataset_201708.pkl')
 
-data06 = pd.read_pickle('data_raw/df_dataset_201709.pkl')
+data06 = pd.read_pickle('./data_raw/real_transaction_data/df_dataset_201709.pkl')
 
 ########################################################################################################################
 ########################################################################################################################

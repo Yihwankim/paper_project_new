@@ -324,7 +324,7 @@ def append_to_df2():
 ########################################################################################################################
 # 엑셀값 출력
 
-df_Gu = pd.read_excel('Gangbuk_edit1/Eunpyeonggu_edit1.xlsx', sheet_name='edit1', header=0, skipfooter=0)
+df_Gu = pd.read_excel('data_process/Gangbuk_edit1/Eunpyeonggu_edit1.xlsx', sheet_name='edit1', header=0, skipfooter=0)
 ########################################################################################################################
 # 전처리 대상 값들을 새로운 데이터프레임으로 지정하기
 
@@ -338,7 +338,7 @@ df = df_Gu.loc[df_Gu['type_capacity10'].str.contains('㎡', na=False)]
 df_Gu2 = pd.concat([df_Gu2, df])
 
 # 전처리 대상 엑셀파일을 edit2로 저장, 개별 수정
-df_Gu2.to_excel('Gangbuk_edit2/Eunpyeonggu_edit2.xlsx', sheet_name='edit2', index=True)
+# df_Gu2.to_excel('data_process/Gangbuk_edit2/Eunpyeonggu_edit2.xlsx', sheet_name='edit2', index=True)
 ########################################################################################################################
 # 전처리 대상이 아닌 값들을 따로 보관해두기
 
@@ -356,7 +356,7 @@ df_Gu = df_Gu[df_Gu['type_capacity10'].isnull()]
 '''
 
 # 수정된 엑셀파일 다시 불러오고, sorting 다시 하기
-df_Gu2 = pd.read_excel('Gangbuk_edit2/Eunpyeonggu_edit2.xlsx', sheet_name='edit2', header=0, skipfooter=0,
+df_Gu2 = pd.read_excel('data_process/Gangbuk_edit2/Eunpyeonggu_edit2.xlsx', sheet_name='edit2', header=0, skipfooter=0,
                        usecols='B:E')
 
 df_name = df_Gu2[['읍면동', '아파트']]  # 여러 열을 추출하고 싶을때는 [[ 두개를 사용 ]]
@@ -635,4 +635,4 @@ print('code: ', len(code))
 df_Gu3 = pd.concat([df_Gu2, df_Gu])
 
 # 결과값 엑셀로 내보내기
-df_Gu3.to_excel('Gangbuk_edit3/Eunpyeonggu_edit3.xlsx', sheet_name='edit3', index=False)
+df_Gu3.to_excel('data_process/Gangbuk_edit3/Eunpyeonggu_edit3.xlsx', sheet_name='edit3', index=False)

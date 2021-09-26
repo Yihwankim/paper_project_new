@@ -275,8 +275,9 @@ def append_to_df():
 
 ########################################################################################################################
 # 엑셀값 출력
+## 은평구의 사례
 
-df_Gu = pd.read_excel('Gangbuk/Eunpyeonggu.xlsx', sheet_name=None, header=0, skipfooter=0,
+df_Gu = pd.read_excel('data_raw/Gangbuk/Eunpyeonggu.xlsx', sheet_name=None, header=0, skipfooter=0,
                       usecols='C:D, G:H')
 
 # 출력한 엑셀값 하나로 합치기
@@ -572,4 +573,4 @@ def check_length():
 #######################################################################################################################
 
 # 결과값 엑셀로 내보내기
-df_Gu.to_excel('Gangbuk_edit1/Eunpyeonggu_edit1.xlsx', sheet_name='edit1', index=False)
+df_Gu.to_excel('data_process/Gangbuk_edit1/Eunpyeonggu_edit1.xlsx', sheet_name='edit1', index=False)

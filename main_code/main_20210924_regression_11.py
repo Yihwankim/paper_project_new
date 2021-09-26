@@ -18,9 +18,9 @@ from plotly.validators.scatter.marker import SymbolValidator  # 마커사용
 
 #######################################################################################################################
 # import data
-df_mb = pd.read_excel('real_transaction2/yearly_edit/seoul_apt_09to12_edit.xlsx', header=0, skipfooter=0)
-df_gh = pd.read_excel('real_transaction2/yearly_edit/seoul_apt_13to16_edit.xlsx', header=0, skipfooter=0)
-df_ji = pd.read_excel('real_transaction2/yearly_edit/seoul_apt_17to20_edit.xlsx', header=0, skipfooter=0)
+df_mb = pd.read_excel('data_process/section_edit/seoul_apt_09to12_edit.xlsx', header=0, skipfooter=0)
+df_gh = pd.read_excel('data_process/section_edit/seoul_apt_13to16_edit.xlsx', header=0, skipfooter=0)
+df_ji = pd.read_excel('data_process/section_edit/seoul_apt_17to20_edit.xlsx', header=0, skipfooter=0)
 
 #######################################################################################################################
 df_mb = df_mb.dropna()
@@ -82,7 +82,7 @@ df_ji_output = pd.concat((df_ji_res.params, df_ji_res.tvalues, df_ji_res.pvalues
 df_ji_output = df_ji_output.rename(columns={0: 'coef', 1: 't-value', 2: 'p-value'})
 
 # 엑셀 파일로 변환
-with pd.ExcelWriter('real_transaction2/yearly_edit/section_output.xlsx') as writer:
+with pd.ExcelWriter('data_process/section_edit/section_output.xlsx') as writer:
     df_mb_output.to_excel(writer, sheet_name='09to12')
     df_gh_output.to_excel(writer, sheet_name='13to16')
     df_ji_output.to_excel(writer, sheet_name='17to20')

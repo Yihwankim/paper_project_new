@@ -13,7 +13,7 @@ import numpy as np
 
 ########################################################################################################################
 # 크롤링 데이터 불러오기
-df_seoul = pd.read_excel('Hedonic_index/seoul_replicating_dummy.xlsx', header=0, skipfooter=0)
+df_seoul = pd.read_excel('data_process/apt_data/seoul_replicating_dummy.xlsx', header=0, skipfooter=0)
 
 # 매칭을 위해 KEY 값 만들기
 df_seoul['건축년도'] = df_seoul['사용승인일'].dt.year
@@ -35,13 +35,13 @@ df_seoul['matching'] = df_seoul['법정동'] + " " + df_seoul['전용면적1'] +
 df_seoul = df_seoul.sort_values(by=['matching'])
 
 ########################################################################################################################
-length = 49  # 2009년 1분기부터 2021년 1분기까지의 데이터를 활용할 예정, 총 42분기 월단위로는 42*3=126
+length = 49  # 2009년 1분기부터 2021년 1분기까지의 데이터를 활용할 예정, 총 49분기 월단위로는 42*3=126
 
 for i in tqdm(range(length)):
     if i == 0:
-        data01 = pd.read_pickle('real_transaction2/df_dataset_' + str(i + 1) + '.pkl')
-        data02 = pd.read_pickle('real_transaction2/df_dataset_' + str(i + 2) + '.pkl')
-        data03 = pd.read_pickle('real_transaction2/df_dataset_' + str(i + 3) + '.pkl')
+        data01 = pd.read_pickle('data_process/monthly_data/df_dataset_' + str(i + 1) + '.pkl')
+        data02 = pd.read_pickle('data_process/monthly_data/df_dataset_' + str(i + 2) + '.pkl')
+        data03 = pd.read_pickle('data_process/monthly_data/df_dataset_' + str(i + 3) + '.pkl')
 
         # 월별 데이터를 각 분기별 데이터로 만들기
         data_quarter = pd.concat([data01, data02, data03], axis=0)
@@ -113,9 +113,9 @@ for i in tqdm(range(length)):
         df_index = df_seoul_Q
 
     else:
-        data01 = pd.read_pickle('real_transaction2/df_dataset_' + str(i * 3 + 1) + '.pkl')
-        data02 = pd.read_pickle('real_transaction2/df_dataset_' + str(i * 3 + 2) + '.pkl')
-        data03 = pd.read_pickle('real_transaction2/df_dataset_' + str(i * 3 + 3) + '.pkl')
+        data01 = pd.read_pickle('data_process/monthly_data/df_dataset_' + str(i * 3 + 1) + '.pkl')
+        data02 = pd.read_pickle('data_process/monthly_data/df_dataset_' + str(i * 3 + 2) + '.pkl')
+        data03 = pd.read_pickle('data_process/monthly_data/df_dataset_' + str(i * 3 + 3) + '.pkl')
 
         # 월별 데이터를 각 분기별 데이터로 만들기
         data_quarter = pd.concat([data01, data02, data03], axis=0)
@@ -186,4 +186,4 @@ for i in tqdm(range(length)):
 
         df_index = pd.concat([df_index, df_seoul_Q])
 
-df_index.to_excel('real_transaction2/Seoul_index.xlsx')
+df_index.to_excel('data_process/apt_data/Seoul_index.xlsx')
