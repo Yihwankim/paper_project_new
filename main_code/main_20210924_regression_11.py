@@ -1,20 +1,8 @@
 # import packages
 from tqdm import tqdm
 import pandas as pd
-import datetime
 import numpy as np
-import matplotlib.pyplot as plt
 import statsmodels.api as sm
-from IPython.core.display import HTML
-
-from urllib.request import urlopen
-import json
-
-import plotly.express as px  # 빠르게 사용
-import plotly.graph_objects as go  # 디테일하게 설정해야할때
-import plotly.figure_factory as ff
-from plotly.subplots import make_subplots  # 여러 subplot을 그릴때
-from plotly.validators.scatter.marker import SymbolValidator  # 마커사용
 
 #######################################################################################################################
 # import data
