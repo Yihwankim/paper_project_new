@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 
+### 수정요망: 쥬피터에서 완전 실습 후 수정할 것
+
 #######################################################################################################################
 # import data
 df_mb = pd.read_excel('data_process/section_edit/seoul_apt_09to12_edit.xlsx', header=0, skipfooter=0)
@@ -32,6 +34,15 @@ df_mb_result = df_mb_res.summary(xname=X.columns.tolist())
 
 df_mb_output = pd.concat((df_mb_res.params, df_mb_res.tvalues, df_mb_res.pvalues), axis=1)
 df_mb_output = df_mb_output.rename(columns={0: 'coef', 1: 't-value', 2: 'p-value'})
+df_mb_output = df_mb_output.rename(index={'x1': 'year', 'x2': 'year_sq', 'x3': 'log_num', 'x4': 'car_per',
+                                          'x5': 'area', 'x6': 'room', 'x7': 'toilet', 'x8': 'floor',
+                                          'x9': 'floor_sq', 'x10': 'H2', 'x11': 'H3', 'x12': 'T2', 'x13': 'T3',
+                                          'x14': 'C1', 'x15': 'FAR', 'x16': 'BC', 'x17': 'Efficiency',
+                                          'x18': 'dist_elem', 'x19': 'dist_high', 'x20': 'dist_sub', 'x21': 'dist_park',
+                                          'x22': 'G2', 'x23': 'G3', 'x24': 'G4', 'X25': 'G5',
+                                          'x26': 'D2', 'x27': 'D3', 'x28': 'D4', 'x29': 'D5', 'x30': 'D6',
+                                          'x31': 'D7', 'x32': 'D8', 'x33': 'D9', 'x34': 'D10', 'x35': 'D11',
+                                          'x36': 'D12', 'x37': 'D13', 'x38': 'D14', 'x39': 'D15', 'x40': 'D16'})
 
 # 2013 to 2016
 df_gh['log_per_Pr'] = np.log(df_gh['per_Pr'])
@@ -50,6 +61,15 @@ df_gh_result = df_gh_res.summary(xname=X.columns.tolist())
 
 df_gh_output = pd.concat((df_gh_res.params, df_gh_res.tvalues, df_gh_res.pvalues), axis=1)
 df_gh_output = df_gh_output.rename(columns={0: 'coef', 1: 't-value', 2: 'p-value'})
+df_gh_output = df_gh_output.rename(index={'x1': 'year', 'x2': 'year_sq', 'x3': 'log_num', 'x4': 'car_per',
+                                          'x5': 'area', 'x6': 'room', 'x7': 'toilet', 'x8': 'floor',
+                                          'x9': 'floor_sq', 'x10': 'H2', 'x11': 'H3', 'x12': 'T2', 'x13': 'T3',
+                                          'x14': 'C1', 'x15': 'FAR', 'x16': 'BC', 'x17': 'Efficiency',
+                                          'x18': 'dist_elem', 'x19': 'dist_high', 'x20': 'dist_sub', 'x21': 'dist_park',
+                                          'x22': 'G2', 'x23': 'G3', 'x24': 'G4', 'X25': 'G5',
+                                          'x26': 'D18', 'x27': 'D19', 'x28': 'D20', 'x29': 'D21', 'x30': 'D22',
+                                          'x31': 'D23', 'x32': 'D24', 'x33': 'D25', 'x34': 'D26', 'x35': 'D27',
+                                          'x36': 'D28', 'x37': 'D29', 'x38': 'D30', 'x39': 'D31', 'x40': 'D32'})
 
 # 2017 to 2020
 df_ji['log_per_Pr'] = np.log(df_ji['per_Pr'])
@@ -68,6 +88,15 @@ df_ji_result = df_ji_res.summary(xname=X.columns.tolist())
 
 df_ji_output = pd.concat((df_ji_res.params, df_ji_res.tvalues, df_ji_res.pvalues), axis=1)
 df_ji_output = df_ji_output.rename(columns={0: 'coef', 1: 't-value', 2: 'p-value'})
+df_ji_output = df_ji_output.rename(index={'x1': 'year', 'x2': 'year_sq', 'x3': 'log_num', 'x4': 'car_per',
+                                          'x5': 'area', 'x6': 'room', 'x7': 'toilet', 'x8': 'floor',
+                                          'x9': 'floor_sq', 'x10': 'H2', 'x11': 'H3', 'x12': 'T2', 'x13': 'T3',
+                                          'x14': 'C1', 'x15': 'FAR', 'x16': 'BC', 'x17': 'Efficiency',
+                                          'x18': 'dist_elem', 'x19': 'dist_high', 'x20': 'dist_sub', 'x21': 'dist_park',
+                                          'x22': 'G2', 'x23': 'G3', 'x24': 'G4', 'X25': 'G5',
+                                          'x26': 'D34', 'x27': 'D35', 'x28': 'D36', 'x29': 'D37', 'x30': 'D38',
+                                          'x31': 'D39', 'x32': 'D40', 'x33': 'D41', 'x34': 'D42', 'x35': 'D43',
+                                          'x36': 'D44', 'x37': 'D45', 'x38': 'D46', 'x39': 'D47', 'x40': 'D48'})
 
 # 엑셀 파일로 변환
 with pd.ExcelWriter('data_process/section_edit/section_output.xlsx') as writer:
