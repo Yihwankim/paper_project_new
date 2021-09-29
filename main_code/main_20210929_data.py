@@ -23,7 +23,7 @@ for i in tqdm(range(len_gu)):
     for j in range(len_time):
         df_all['i' + str(i+1) + ',' + str(j+1)] = df_all['GU' + str(i+1)] * df_all['D' + str(j+1)]
 
-print(1)
+df_all.to_excel('data_process/apt_data/seoul_interaction_term.xlsx')
 
 
 
