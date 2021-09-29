@@ -45,94 +45,29 @@ for i in tqdm(range(length1)):
 # 건설사 더미(C1) 생성하기
 df['C1'] = df_hedonic['건설사']
 
-'''
-# 각 지역구에 해당하는 key 값 만들기
 
+# 각 지역구에 해당하는 더미변수 만들기
+'''
 도심권: 용산구 = 1, 종로구 = 2, 중구 = 3
 동북권: 강북구 = 4, 광진구 = 5, 노원구 = 6, 도봉구 = 7, 동대문구 = 8, 성동구 = 9, 성북구 = 10, 중랑구 = 11
 서북권: 마포구 = 12, 서대문구 = 13, 은평구 = 14
 서남권: 강서구 = 15, 관악구 = 16, 구로구 = 17, 금천구 = 18, 동작구 = 19, 양천구 = 20, 영등포구 = 21
 동남권: 강남구 = 22, 강동구 = 23, 서초구 = 24, 송파구 = 25
-
-df['key'] = 0
-length2 = len(df['지역구'])
-
-for i in tqdm(range(length2)):
-    if df['지역구'].iloc[i] == '용산구':
-        df['key'].iloc[i] = 1
-
-    elif df['지역구'].iloc[i] == '종로구':
-        df['key'].iloc[i] = 2
-
-    elif df['지역구'].iloc[i] == '중구':
-        df['key'].iloc[i] = 3
-
-    elif df['지역구'].iloc[i] == '강북구':
-        df['key'].iloc[i] = 4
-
-    elif df['지역구'].iloc[i] == '광진구':
-        df['key'].iloc[i] = 5
-
-    elif df['지역구'].iloc[i] == '노원구':
-        df['key'].iloc[i] = 6
-
-    elif df['지역구'].iloc[i] == '도봉구':
-        df['key'].iloc[i] = 7
-
-    elif df['지역구'].iloc[i] == '동대문구':
-        df['key'].iloc[i] = 8
-
-    elif df['지역구'].iloc[i] == '성동구':
-        df['key'].iloc[i] = 9
-
-    elif df['지역구'].iloc[i] == '성북구':
-        df['key'].iloc[i] = 10
-
-    elif df['지역구'].iloc[i] == '중랑구':
-        df['key'].iloc[i] = 11
-
-    elif df['지역구'].iloc[i] == '마포구':
-        df['key'].iloc[i] = 12
-
-    elif df['지역구'].iloc[i] == '서대문구':
-        df['key'].iloc[i] = 13
-
-    elif df['지역구'].iloc[i] == '은평구':
-        df['key'].iloc[i] = 14
-
-    elif df['지역구'].iloc[i] == '강서구':
-        df['key'].iloc[i] = 15
-
-    elif df['지역구'].iloc[i] == '관악구':
-        df['key'].iloc[i] = 16
-
-    elif df['지역구'].iloc[i] == '구로구':
-        df['key'].iloc[i] = 17
-
-    elif df['지역구'].iloc[i] == '금천구':
-        df['key'].iloc[i] = 18
-
-    elif df['지역구'].iloc[i] == '동작구':
-        df['key'].iloc[i] = 19
-
-    elif df['지역구'].iloc[i] == '양천구':
-        df['key'].iloc[i] = 20
-
-    elif df['지역구'].iloc[i] == '영등포구':
-        df['key'].iloc[i] = 21
-
-    elif df['지역구'].iloc[i] == '강남구':
-        df['key'].iloc[i] = 22
-
-    elif df['지역구'].iloc[i] == '강동구':
-        df['key'].iloc[i] = 23
-
-    elif df['지역구'].iloc[i] == '서초구':
-        df['key'].iloc[i] = 24
-
-    elif df['지역구'].iloc[i] == '송파구':
-        df['key'].iloc[i] = 25
 '''
+len_gu = 25
+for i in tqdm(range(len_gu)):
+    df['Gu' + str(i+1)] = 0
+
+length2 = len(df['지역구'])
+Gu = ['용산구', '종로구', '중구', '강북구', '광진구', '노원구', '도봉구', '동대문구', '성동구', '성북구', '중랑구', '마포구',
+      '서대문구', '은평구', '강서구', '관악구', '구로구', '금천구', '동작구', '양천구', '영등포구', '강남구', '강동구', '서초구',
+      '송파구']
+
+for k in tqdm(range(len_gu)):
+    for i in tqdm(range(length2)):
+        if df['지역구'].iloc[i] == Gu[k]:
+            df['Gu' + str(k+1)].iloc[i] = 1
+
 # 권역별 더미(G1 ~ G5) 형성하기
 df['G1'] = 0  # 도심권
 df['G2'] = 0  # 동북권
@@ -309,6 +244,7 @@ for i in tqdm(range(length2)):
     elif df['지역구'].iloc[i] == '송파구':
         df['S6'].iloc[i] = 1
 
+''' 이제는 할 필요 없음 
 df['yr'] = np.log(df['연수'])
 df['num'] = np.log(df['세대수'])
 df['car'] = np.log(df['주차대수_총'])
@@ -328,7 +264,7 @@ df_hedonic_index = df[['Pr', 'yr', 'num', 'car', 'car_per', 'capacity', 'room', 
                        'C1',
                        'G1', 'G2', 'G3', 'G4', 'G5',
                        'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11']]
-
+'''
 
 #####################################################################################################################
 df_hedonic_time = pd.DataFrame()
@@ -336,7 +272,6 @@ df_hedonic_time['gu'] = df['지역구']
 df_hedonic_time['dong'] = df['법정동']
 df_hedonic_time['per_Pr'] = df['Pr'] / df['전용면적']  # 면적당 가격
 df_hedonic_time['year'] = df['연수']/12
-df_hedonic_time['year_sq'] = df_hedonic_time['year']**2
 df_hedonic_time['num'] = df['세대수']
 df_hedonic_time['car'] = df['주차대수_총']
 df_hedonic_time['car_per'] = df['주차대수_세대']
@@ -356,6 +291,10 @@ df_hedonic_time[['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S
                                                                                             'S5', 'S6', 'S7', 'S8',
                                                                                             'S9', 'S10', 'S11']]
 
+for i in range(length1):
+    df_hedonic_time['D' + str(i+1)] = df['D' + str(i+1)]
+
+'''
 df_hedonic_time[['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16',
                  'D17', 'D18', 'D19', 'D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28', 'D29', 'D30',
                  'D31', 'D32', 'D33', 'D34', 'D35', 'D36', 'D37', 'D38', 'D39', 'D40', 'D41', 'D42', 'D43', 'D44',
@@ -363,12 +302,41 @@ df_hedonic_time[['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D
     = df[['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16',
           'D17', 'D18', 'D19', 'D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28', 'D29', 'D30', 'D31',
           'D32', 'D33', 'D34', 'D35', 'D36', 'D37', 'D38', 'D39', 'D40', 'D41', 'D42', 'D43', 'D44', 'D45', 'D46',
-          'D47', 'D48', 'D49']]
+          'D47', 'D48', 'D49']]'''
 
 df_hedonic_time[['lat', 'long']] = df[['위도', '경도']]
 
+# 09년 1분기부터 21년 1분기 까지 49개 더미변수 추가
+df_hedonic_time['time'] = df['Time']
+
+# 지역구 더미변수 추가하기
+for k in range(len_gu):
+    df_hedonic_time['GU' + str(k+1)] = df['Gu' + str(k+1)]
+
+# 1층 더미변수 추가하기
+df_hedonic_time['first'] = np.where(df['층'] == 1, 1, 0)
+
+# 연수 분기에 따라 수정하기
+'''
+Time에 따라~ 
+D1 ~ D49
+연수 기준 (연), 21년 5월 
+D49: 3개월 차감, -0.25
+D48: 6개월 차감, -0.50
+D47: 9개월 차감, -0.75 -- D + str(i)
+==> - (50 - i) * 0.25
+D1 : 49*3개월 차감, -12.25
+'''
+len_time = 49
+
+df_hedonic_time['old'] = df_hedonic_time['year'] - (50 - df['Time'])*0.25
+df_hedonic_time['old_sq'] = df_hedonic_time['old']**2
+
 df_hedonic_time.to_excel('data_process/apt_data/seoul_full_variable.xlsx', index=False)
 
+########################################################################################################################
+# 분기별로 데이터 나누기
+'''
 for i in tqdm(range(length1)):
     num = df_hedonic_time['D' + str(i+1)] == 1
     df_quarter = df_hedonic_time[num]
@@ -386,5 +354,4 @@ for i in tqdm(range(length1)):
                'dist_elem', 'dist_middle', 'dist_high', 'dist_sub', 'dist_park', 'G1', 'G2', 'G3', 'G4', 'G5', 'S1',
                'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'lat', 'long']]
     df.to_excel('data_process/quarterly_edit/seoul_apt' + str(i+1) + '.xlsx')
-
-
+'''
