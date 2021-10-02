@@ -21,3 +21,9 @@ X = sm.add_constant(df_seoul[['old', 'old_sq', 'log_num', 'car_per', 'area', 'ro
                               'dist_sub', 'dist_park']])
 
 
+len_gu = 25  # i
+len_time = 49  # j
+for i in range(len_gu):
+    'Gu' + str(i+1)
+
+
