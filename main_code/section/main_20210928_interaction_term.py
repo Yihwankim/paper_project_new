@@ -1,3 +1,5 @@
+# 필요없어진 파일 제거요망
+
 # import packages
 from tqdm import tqdm
 import pandas as pd

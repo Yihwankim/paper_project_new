@@ -49,23 +49,23 @@ df_seoul['time(H)'] = np.select(conditionlist, choicelist, default='wrong')
 # 기존의 21년 data 제거하기
 num = df_seoul['time(H)'] != 'wrong'
 df = df_seoul[num]
-df['time(H)'] = pd.to_numeric(df['time(H)'])
+# df['time(H)'] = pd.to_numeric(df['time(H)'])
 
 # year dummy 만들기
 len_half = 24
 for i in tqdm(range(len_half)):
-    df['H' + str(i + 1)] = 0
+    df['Half' + str(i + 1)] = 0
 
 length = len(df['gu'])
 for k in tqdm(range(len_half)):
     for i in range(length):
         if df['time(H)'].iloc[i] == 'half' + str(k + 1):
-            df['H' + str(k + 1)].iloc[i] = 1
+            df['Half' + str(k + 1)].iloc[i] = 1
 
 # half dummy 갯수 확인
 number_data = []
 for i in range(len_half):
-    a = np.sum(df['H' + str(i + 1)])
+    a = np.sum(df['Half' + str(i + 1)])
     number_data.append(a)
 num_half_dummy = np.sum(number_data)
 
@@ -77,7 +77,7 @@ len_time = 24
 # interaction_term : i25,20 ==> 2018년 2분기에 거래된 송파구(25)의 data
 for i in tqdm(range(len_gu)):
     for j in range(len_time):
-        df['i' + str(i+1) + ',' + str(j+1)] = df['H' + str(j+1)] * df['GU' + str(i+1)]
+        df['i' + str(i+1) + ',' + str(j+1)] = df['Half' + str(j+1)] * df['GU' + str(i+1)]
 
 # data 갯수 확인
 number_data = []
