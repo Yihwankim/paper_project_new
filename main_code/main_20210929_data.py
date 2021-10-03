@@ -4,13 +4,12 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 
-### 수정요망: 쥬피터에서 완전 실습 후 수정할 것
+### 수정요망: 아직 진행 중 (해당 코드는 시험 중)
 
 #######################################################################################################################
 # import data
 df_all = pd.read_excel('data_process/apt_data/seoul_full_variable.xlsx', header=0, skipfooter=0)
 
-df_all.to_pickle('data_process/apt_data/seoul_variable_district_dummy.pkl')
 #######################################################################################################################
 # interaction term 만들기
 # 지역구 개수 25개

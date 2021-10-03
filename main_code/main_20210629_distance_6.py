@@ -10,7 +10,6 @@ import numpy as np
 from haversine import haversine
 from tqdm import tqdm
 
-
 ########################################################################################################################
 # 함수 선언
 

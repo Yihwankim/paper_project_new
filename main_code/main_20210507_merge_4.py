@@ -67,6 +67,7 @@ df_GN = pd.concat(dfs2, axis=0)  # axis=0 : 밑으로 붙이기
 
 df_GB.to_excel('data_process/apt_data/Gangbuk_total.xlsx', sheet_name='Gangbuk', index=False)
 df_GN.to_excel('data_process/apt_data/Gangnam_total.xlsx', sheet_name='Gangnam', index=False)
+########################################################################################################################
 
 df_GB = pd.read_excel('data_process/apt_data/Gangbuk_total.xlsx', header=0, skipfooter=0)
 df_GN = pd.read_excel('data_process/apt_data/Gangnam_total.xlsx', header=0, skipfooter=0)

@@ -21,7 +21,7 @@ import datetime
 import numpy as np
 
 ########################################################################################################################
-df_hedonic = pd.read_excel('data_process/apt_data/Seoul_index.xlsx', header=0, skipfooter=0)
+df_hedonic = pd.read_pickle('data_process/apt_data/Seoul_index.pkl')
 
 df = df_hedonic
 
@@ -43,7 +43,7 @@ for i in tqdm(range(length1)):
     df['D' + str(i + 1)] = np.where(df['Time'] == i + 1, 1, 0)
 
 # 건설사 더미(C1) 생성하기
-df['C1'] = df_hedonic['건설사']
+df['C1'] = df_hedonic['C1']
 
 
 # 각 지역구에 해당하는 더미변수 만들기
@@ -276,12 +276,12 @@ df_hedonic_time['num'] = df['세대수']
 df_hedonic_time['car'] = df['주차대수_총']
 df_hedonic_time['car_per'] = df['주차대수_세대']
 df_hedonic_time['area'] = df['전용면적']
-df_hedonic_time['room'] = df['방개수']
-df_hedonic_time['toilet'] = df['화장실개수']
+df_hedonic_time['room'] = df['방 개수']
+df_hedonic_time['toilet'] = df['화장실 개수']
 df_hedonic_time['floor'] = df['층']
 df_hedonic_time['floor_sq'] = df['층']**2
-df_hedonic_time[['H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'C1']] = df[['H1', 'H2', 'H3', 'T1', 'T2', 'T3', '건설사']]
-df_hedonic_time[['FAR', 'BC', 'Efficiency']] = df[['용적률', '건폐율', '전용률']]
+df_hedonic_time[['H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'C1']] = df[['H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'C1']]
+df_hedonic_time[['FAR', 'BC', 'Efficiency']] = df[['용적률', '건폐율', '전용률(%)']]
 df_hedonic_time[['dist_elem', 'dist_middle', 'dist_high', 'dist_sub', 'dist_park']] = df[['dist_elem', 'dist_middle',
                                                                                           'dist_high', 'dist_sub',
                                                                                           'dist_park']]
@@ -332,7 +332,8 @@ len_time = 49
 df_hedonic_time['old'] = df_hedonic_time['year'] - (50 - df['Time'])*0.25
 df_hedonic_time['old_sq'] = df_hedonic_time['old']**2
 
-df_hedonic_time.to_excel('data_process/apt_data/seoul_full_variable.xlsx', index=False)
+# df_hedonic_time.to_excel('data_process/apt_data/seoul_full_variable.xlsx', index=False)
+df_hedonic_time.to_pickle('data_process/apt_data/seoul_full_variable.pkl')
 
 ########################################################################################################################
 # 분기별로 데이터 나누기

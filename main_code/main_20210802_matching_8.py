@@ -20,7 +20,7 @@ df_seoul['건축년도'] = df_seoul['사용승인일'].dt.year
 # 참고 :
 # https://www.delftstack.com/ko/howto/python-pandas/how-to-extract-month-and-year-separately-from-datetime-column-in-pandas/
 
-df_seoul['전용면적'] = round(df_seoul['전용면적'], 2)
+df_seoul['전용면적'] = round(df_seoul['전용면적(㎡)'], 2)
 df_seoul['전용면적1'] = df_seoul['전용면적']
 
 # df_seoul['전용면적1'] = df_seoul['전용면적'].astype(int)
@@ -88,9 +88,9 @@ for i in tqdm(range(length)):
         # 세부적인 조정
         df_seoul_Q = df_seoul_1q[['지역구', '법정동', '아파트_x', '아파트_y', '아파트코드', '사용승인일', '연수', '세대수',
                                   '저층', '고층', '주차대수_총', '주차대수_세대', '용적률', '건폐율', '위도', '경도', '건설사',
-                                  '난방', '구조', '면적유형', '전용면적', '전용률', '방개수', '화장실개수',
+                                  '난방', '구조', '면적유형', '전용면적', '전용률(%)', '방 개수', '화장실 개수',
                                   'dist_elem', 'dist_middle', 'dist_high', 'dist_sub', 'dist_park', '층', '거래금액',
-                                  'H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'G1']]
+                                  'C1', 'H1', 'H2', 'H3', 'T1', 'T2', 'T3']]
 
         df_seoul_Q['층'] = pd.to_numeric(df_seoul_Q['층'])
         df_seoul_Q['거래금액'].iloc[0]
@@ -162,9 +162,9 @@ for i in tqdm(range(length)):
         # 세부적인 조정
         df_seoul_Q = df_seoul_q[['지역구', '법정동', '아파트_x', '아파트_y', '아파트코드', '사용승인일', '연수', '세대수',
                                  '저층', '고층', '주차대수_총', '주차대수_세대', '용적률', '건폐율', '위도', '경도', '건설사',
-                                 '난방', '구조', '면적유형', '전용면적', '전용률', '방개수', '화장실개수',
+                                 '난방', '구조', '면적유형', '전용면적', '전용률(%)', '방 개수', '화장실 개수',
                                  'dist_elem', 'dist_middle', 'dist_high', 'dist_sub', 'dist_park', '층', '거래금액',
-                                 'H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'G1']]
+                                 'C1', 'H1', 'H2', 'H3', 'T1', 'T2', 'T3']]
 
         df_seoul_Q['층'] = pd.to_numeric(df_seoul_Q['층'])
         df_seoul_Q['거래금액'].iloc[0]
@@ -186,4 +186,7 @@ for i in tqdm(range(length)):
 
         df_index = pd.concat([df_index, df_seoul_Q])
 
+########################################################################################################################
 df_index.to_excel('data_process/apt_data/Seoul_index.xlsx')
+df_index.to_pickle('data_process/apt_data/Seoul_index.pkl')
+print(1)
