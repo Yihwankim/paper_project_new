@@ -11,6 +11,8 @@ df = pd.read_pickle('data_process/apt_data/seoul_year_interaction_term.pkl')
 
 df_seoul = df.dropna()
 
+df_seoul['price'] = df_seoul['per_Pr'] * df_seoul['area']
+
 # Regression
 df_seoul['log_per_Pr'] = np.log(df_seoul['per_Pr'])
 df_seoul['log_num'] = np.log(df_seoul['num'])
@@ -90,7 +92,7 @@ df_output.to_excel('data_process/regression_result_data/half_time_interaction_re
 summary = df_seoul.describe()
 sum = np.sum(X)
 
-summary.to_excel('data_process/regression_result_data/descriptive_half_time_interaction_regression_ols.xlsx')
+summary.to_excel('data_process/regression_result_data/descriptive_half_time_interaction_regression_full.xlsx')
 sum.to_excel('data_process/regression_result_data/sum_half_time_interaction_regression_ols.xlsx')
 ########################################################################################################################
 
