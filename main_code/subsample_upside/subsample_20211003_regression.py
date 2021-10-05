@@ -93,15 +93,12 @@ sum = np.sum(X)
 summary.to_excel('data_process/regression_result_data/descriptive_half_time_interaction_regression_ols.xlsx')
 sum.to_excel('data_process/regression_result_data/sum_half_time_interaction_regression_ols.xlsx')
 ########################################################################################################################
-'''
+
 # Regression2
 indep_var = ['old', 'old_sq', 'log_num', 'car_per', 'area', 'room', 'toilet', 'floor', 'floor_sq', 'first', 'H2',
              'H3', 'T2', 'T3', 'C1', 'FAR', 'BC', 'Efficiency', 'dist_high', 'dist_sub', 'dist_park']
 
 independent_part = indep_var + gu_dum[1:] + time_dum[1:]
-
-num = df_seoul[independent_part]
-df_seoul = df_seoul[num]
 
 X = sm.add_constant(df_seoul[independent_part])
 Y = df_seoul['log_per_Pr']
@@ -129,8 +126,9 @@ df['std'] = df_part_output['std'].astype(str)
 
 df['beta'] = df['coef'] + ' (' + df['std'] + ')'
 
-length = len(df['sig'])
 df['sig'] = np.nan
+length = len(df['sig'])
+
 for i in tqdm(range(length)):
     if df['p-value'].iloc[i] <= 0.1:
         df['sig'].iloc[i] = '*'
@@ -153,6 +151,6 @@ print(1)
 vif = pd.DataFrame()
 vif['vif'] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 vif['variable'] = X.columns
+vif.to_excel('data_process/regression_result_data/half_time_no_interaction_regression_ols_vif.xlsx')
+df_output['vif'] = vif['vif']
 
-df_output['vif'] = vif['variable']
-'''
