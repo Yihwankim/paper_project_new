@@ -82,7 +82,26 @@ for i in tqdm(range(length)):
         df['sig'].iloc[i] = '***'
 
 
-df_output = df[['variables', 'beta', 'sig']]
+df_output2 = df[['variables', 'beta', 'sig']]
 
 
-df_output.to_excel('data_process/regression_result_data/non_spec_half_time_interaction_regression_ols.xlsx')
+df_output2.to_excel('data_process/regression_result_data/non_spec_half_time_interaction_regression_ols.xlsx')
+
+########################################################################################################################
+'''# wald_test
+# speculative_regression 과 non_speculative_regression 을 같이 돌리고 비고
+df_output3 = pd.DataFrame()
+
+length = 21
+variable = []
+for i in range(length):
+    a = 'x' + str(i+1)
+    variable.append(a)
+
+df_nspec_wald = df_nspec_output.loc[variable]
+df_spec_wald = df_spec_output.loc[variable]
+
+df_output3['diff.'] = (df_spec_wald['coef'] - df_nspec_wald['coef'])**2
+df_output3['var'] = (df_spec_wald['std'])**2 + (df_nspec_wald['std'])**2
+df_output3['wald stat.'] = df_output3['diff.'] / df_output3['var']
+'''
