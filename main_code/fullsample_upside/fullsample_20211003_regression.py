@@ -69,8 +69,9 @@ df['std'] = df_full_output['std'].astype(str)
 
 df['beta'] = df['coef'] + ' (' + df['std'] + ')'
 
-length = len(df['sig'])
 df['sig'] = np.nan
+length = len(df['sig'])
+
 for i in tqdm(range(length)):
     if df['p-value'].iloc[i] <= 0.1:
         df['sig'].iloc[i] = '*'
