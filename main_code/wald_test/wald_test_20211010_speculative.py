@@ -109,29 +109,49 @@ df_nspec_output['variables'] = x_variables
 ########################################################################################################################
 df_output3 = pd.DataFrame()
 
+# speculative_ variable
 length = 21
-variable = []
+variable_s = []
 for i in range(length):
     a = 'x' + str(i+1)
-    variable.append(a)
+    variable_s.append(a)
 
-df_spec_wald = df_spec_output.loc[variable]
-df_nspec_wald = df_nspec_output.loc[variable]
+# 32부터 54
+for i in range(32, 55):
+    b = 'x' + str(i)
+    variable_s.append(b)
+
+# non_speculative_ variable
+variable_n = []
+for i in range(length):
+    a = 'x' + str(i+1)
+    variable_n.append(a)
+
+# 31부터 53
+for i in range(31, 54):
+    b = 'x' + str(i)
+    variable_n.append(b)
+
+df_spec_wald = df_spec_output.loc[variable_s]
+df_nspec_wald = df_nspec_output.loc[variable_n]
 
 df_output3['variable'] = df_spec_wald['variables']
 df_output3['diff.'] = (df_spec_wald['coef'] - df_nspec_wald['coef'])**2
 df_output3['var'] = (df_spec_wald['std'])**2 + (df_nspec_wald['std'])**2
 df_output3['wald stat.'] = df_output3['diff.'] / df_output3['var']
 
-chisquare(df_output3['wald stat.'], ddof=1)
+df_output3['diff.'].iloc[43] = (df_spec_wald['coef'].iloc[43] - df_nspec_wald['coef'].iloc[43])**2
+df_output3['var'].iloc[43] = (df_spec_wald['std'].iloc[43])**2 + (df_nspec_wald['std'].iloc[43])**2
+df_output3['wald stat.'].iloc[43] = df_output3['diff.'].iloc[43] / df_output3['var'].iloc[43]
 
 chi_p_value = []
-for i in range(length):
+for i in range(len(df_output3['diff.'])):
     a = 1 - stats.chi2.cdf(df_output3['wald stat.'].iloc[i], 1)
     chi_p_value.append(a)
 
 df_output3['chi_p_value'] = chi_p_value
 
+length = len(df_output3['diff.'])
 df_output3['sig'] = np.nan
 for i in range(length):
     if df_output3['chi_p_value'].iloc[i] <= 0.1:
