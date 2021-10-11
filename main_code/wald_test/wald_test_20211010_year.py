@@ -65,6 +65,9 @@ x_variables = ['const'] + independent
 
 df_older_output['variables'] = x_variables
 
+summary_older = df_older_price.describe()
+
+summary_older.to_excel('data_process/regression_result_data/descriptive_older.xlsx')
 #######################################################################################################################
 # Regression_younger
 df_younger_price['log_per_Pr'] = np.log(df_younger_price['per_Pr'])
@@ -110,6 +113,10 @@ x_variables = []
 x_variables = ['const'] + independent
 
 df_younger_output['variables'] = x_variables
+
+summary_younger = df_younger_price.describe()
+
+summary_younger.to_excel('data_process/regression_result_data/descriptive_younger.xlsx')
 
 ########################################################################################################################
 df_output3 = pd.DataFrame()

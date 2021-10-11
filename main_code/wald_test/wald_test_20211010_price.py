@@ -72,6 +72,10 @@ x_variables = ['const'] + independent
 
 df_high_output['variables'] = x_variables
 
+summary_high = df_high_price.describe()
+
+summary_high.to_excel('data_process/regression_result_data/descriptive_high.xlsx')
+
 ########################################################################################################################
 # Regression_low
 df_low_price['log_per_Pr'] = np.log(df_low_price['per_Pr'])
@@ -117,6 +121,10 @@ x_variables = []
 x_variables = ['const'] + independent
 
 df_low_output['variables'] = x_variables
+
+summary_low = df_low_price.describe()
+
+summary_low.to_excel('data_process/regression_result_data/descriptive_low.xlsx')
 
 ########################################################################################################################
 df_output3 = pd.DataFrame()

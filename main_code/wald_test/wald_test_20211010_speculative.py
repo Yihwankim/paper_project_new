@@ -56,6 +56,9 @@ x_variables = ['const'] + independent
 
 df_spec_output['variables'] = x_variables
 
+summary_spec = df_spec.describe()
+
+summary_spec.to_excel('data_process/regression_result_data/descriptive_speculative.xlsx')
 ########################################################################################################################
 df_nspec = pd.read_pickle('data_process/apt_data/non_spec_include_interaction.pkl')
 
@@ -165,4 +168,6 @@ for i in range(length):
     if df_output3['chi_p_value'].iloc[i] <= 0.01:
         df_output3['sig'].iloc[i] = '***'
 
+summary_nspec = df_nspec.describe()
+summary_nspec.to_excel('data_process/regression_result_data/descriptive_non_speculative.xlsx')
 df_output3.to_excel('data_process/regression_result_data/speculative_chisquare.xlsx')
