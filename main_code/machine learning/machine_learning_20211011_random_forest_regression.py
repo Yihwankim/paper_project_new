@@ -37,37 +37,45 @@ y.columns = ['log_per_Pr']
 
 # 3. model 생성
 # 참고: https://statkclee.github.io/model/model-python-predictive-model.html
+rfr_outcome = pd.DataFrame()
+r_square = []
+mean_sq_er = []
+root_mse = []
+correlation = []
+
 features = int(np.sqrt(72))  # tree 에 들어가는 변수의 갯수 선정
 
-for number_estimator in [100, 150, 200]:
+for number_estimator in [100, 150, 200]:  # 최적의 tree 갯수를 찾아보기 위해 100, 150, 200개에 대해 test
     print('Case: number of estimators = ' + str(number_estimator))
     model = RandomForestRegressor(n_estimators=number_estimator, max_features=features, criterion='mse', random_state=2)
     # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
     # max_features: 무작위로 선택할 Feature 의 개수
+    # criterion: model 선정 기준_ mse: mean squared error
+    # random_state: 일관성있는 샘플링을 위함
 
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2)
     # test_size => test sample 의 비율
+    # train 과 test 의 비율 => train : test = 8:2
 
     # 4. model 학습
-    model.fit(x_train, y_train)
+    model.fit(x_train, y_train)  # 상기 조건대로 random_forest_regression_model 학습
 
     # 5. model 검증
-    score = model.score(x_train, y_train)
-    print('R-squared: ', score)
+    score = model.score(x_train, y_train)  # 학습된 모델의 설명계수 값
+    r_square.append(score)
 
     # 6. model 예측
-    y_pred = model.predict(x_test)
+    y_pred = model.predict(x_test)  # test sample 의 값을 model 에 넣어 산출한 값
 
     # 7. model 평가
     mse = mean_squared_error(y_pred, y_test)
     rmse = mse**(1/2)
-    print('MSE = ', mse)
-    print('RMSE = ', rmse)
+    mean_sq_er.append(mse)
+    root_mse.append(rmse)
 
     df = pd.DataFrame({'y_true': y_test['log_per_Pr'], 'y_pred': y_pred})
     cor = df['y_true'].corr(df['y_pred'])
-    print('Correlation = ', cor)
-    print('###########################################################')
+    correlation.append(cor)  # 예측값과 실제값 사이의 correlation
 
     # 8. plot 그리기
     # 참고: https://www.datatechnotes.com/2020/09/regression-example-with-randomforestregressor.html
@@ -75,8 +83,15 @@ for number_estimator in [100, 150, 200]:
     plt.plot(x_axis, df['y_true'], linewidth=1, label="original")
     plt.plot(x_axis, df['y_pred'], linewidth=1.1, label="predicted")
     plt.title("y-test and y-predicted data " + 'case: ' + str(number_estimator))
-    plt.xlabel('X-axis: # data')
-    plt.ylabel('Y-axis: value')
+    plt.xlabel('X-axis: # data')  # x 축은 각 데이터의 순번
+    plt.ylabel('Y-axis: value')  # y 축은 예측 값과 실제 값의 value
     plt.legend(loc='best', fancybox=True, shadow=True)
     plt.grid(True)
     plt.figure()
+
+# 9. 결과값
+rfr_outcome['R_squared'] = r_square
+rfr_outcome['MSE'] = mean_sq_er
+rfr_outcome['RMSE'] = root_mse
+rfr_outcome['Correlation'] = correlation
+rfr_outcome = rfr_outcome.rename(index={0: 'case 1', 1: 'case 2', 2: 'case 3'})
