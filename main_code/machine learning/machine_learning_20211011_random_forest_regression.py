@@ -24,8 +24,10 @@ from sklearn import set_config
 # 전체 데이터 중 1000개를 무작위로 sampling
 # 설명변수의 갯수는 72개: 물리적 특성변수 20개, 거리변수 3개, 지역 더미변수 25개, 시간 더미변수 24개
 # 종속변수는 per_Pr --> log(per_Pr)
-df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')
+# df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
 # df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_full_sample(district+half).pkl') #  풀 샘플
+
+df_sample = pd.read_pickle('seoul_sampling_1000unit.pkl')  # 동일경로 가정
 df_sample = df_sample.dropna()
 X = df_sample.iloc[:, 3:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
 y = df_sample.iloc[:, 2:3]  # per_Price (면적당 가격)을 종속변수로 입력
