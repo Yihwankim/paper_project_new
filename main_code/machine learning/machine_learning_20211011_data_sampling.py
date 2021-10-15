@@ -9,9 +9,43 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 # data
 df_full = pd.read_pickle('data_process/apt_data/seoul_year_interaction_term.pkl')
 
+# time_dummy 수열로 표현
+df_full['time_param'] = df_full['time(H)'].str.slice(start=4)
+df_full['time_param'] = pd.to_numeric(df_full['time_param'])
+
+# 난방 방식 label 로 표현
+df_full['Heat'] = np.nan
+length1 = len(df_full['gu'])
+for i in tqdm(range(length1)):
+    if df_full['H1'].iloc[i] == 1:
+        df_full['Heat'].iloc[i] = 1
+
+for i in tqdm(range(length1)):
+    if df_full['H2'].iloc[i] == 1:
+        df_full['Heat'].iloc[i] = 2
+
+for i in tqdm(range(length1)):
+    if df_full['H3'].iloc[i] == 1:
+        df_full['Heat'].iloc[i] = 3
+
+# 구조 더미 변수 label 로 표현
+df_full['Type'] = np.nan
+length1 = len(df_full['gu'])
+for i in tqdm(range(length1)):
+    if df_full['T1'].iloc[i] == 1:
+        df_full['Type'].iloc[i] = 1
+
+for i in tqdm(range(length1)):
+    if df_full['T2'].iloc[i] == 1:
+        df_full['Type'].iloc[i] = 2
+
+for i in tqdm(range(length1)):
+    if df_full['T3'].iloc[i] == 1:
+        df_full['Type'].iloc[i] = 3
+
 physical_var = ['gu', 'dong', 'per_Pr', 'old', 'old_sq', 'num', 'car_per', 'area', 'room', 'toilet', 'floor',
-                'floor_sq', 'first', 'H1', 'H2', 'H3', 'T1', 'T2', 'T3', 'C1', 'FAR', 'BC', 'Efficiency',
-                'dist_high', 'dist_sub', 'dist_park']
+                'floor_sq', 'first', 'Heat', 'Type', 'C1', 'FAR', 'BC', 'Efficiency',
+                'lat', 'long', 'time_param']
 
 district_var = []
 length1 = 25

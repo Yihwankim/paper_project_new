@@ -44,6 +44,7 @@ r_square = []
 mean_sq_er = []
 root_mse = []
 correlation = []
+mean_ape = []
 
 features = int(np.sqrt(72))  # tree 에 들어가는 변수의 갯수 선정
 
@@ -72,8 +73,10 @@ for number_estimator in [100, 150, 200]:  # 최적의 tree 갯수를 찾아보�
     # 7. model 평가
     mse = mean_squared_error(y_pred, y_test)
     rmse = mse**(1/2)
+    mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
     mean_sq_er.append(mse)
     root_mse.append(rmse)
+    mean_ape.append(mape)
 
     df = pd.DataFrame({'y_true': y_test['log_per_Pr'], 'y_pred': y_pred})
     cor = df['y_true'].corr(df['y_pred'])
@@ -96,4 +99,5 @@ rfr_outcome['R_squared'] = r_square
 rfr_outcome['MSE'] = mean_sq_er
 rfr_outcome['RMSE'] = root_mse
 rfr_outcome['Correlation'] = correlation
+rfr_outcome['MAPE'] = mean_ape
 rfr_outcome = rfr_outcome.rename(index={0: 'case 1', 1: 'case 2', 2: 'case 3'})
