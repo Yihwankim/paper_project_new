@@ -34,7 +34,37 @@ df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
 cor = df['y_true'].corr(df['y_pred'])
 
 ########################################################################################################################
+# 1. dataset load
+X, y = load_boston(return_X_y=True)
+X.shape # (506, 13)
 
+boston = load_boston()
+X = boston.data
+y = boston.target
+colnames = boston.feature_names  # 13개 칼럼 이름 가져올때
+colnames
+# ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']
+
+
+# 2. train/test split
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+x_train.shape  # (354, 13)
+
+
+# 3. model
+model = RandomForestRegressor(n_estimators=400, min_samples_split=3)
+model.fit(X = x_train, y = y_train)
+
+RandomForestRegressor()
+# 4. model의 중요변수
+imp = model.feature_importances_
+imp
+len(imp) # 13 => 13개 칼럼들
+colnames
+
+import matplotlib.pyplot as plt
+plt.barh(range(13), imp)  # (x, y) # 중요도 (y에 얼마나 영향을 미치는지)
+plt.yticks(range(13), colnames)  # 축 이름
 
 
 
