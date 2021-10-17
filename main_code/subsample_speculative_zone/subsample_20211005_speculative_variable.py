@@ -1,4 +1,4 @@
-
+# THIS FILE IS ALREADY ADAPTED TO SAMPLE>
 # import packages
 from tqdm import tqdm
 import pandas as pd
