@@ -2,6 +2,12 @@
 ## 참고: https://joyfuls.tistory.com/62
 ## 전반적으로 위의 링크에서 사용한 방법을 차용했습니다.
 
+# 수정 방향성)
+## 1. 좌표로 시행했을 때와 지역 더미를 추가했을 때 거리 변수를 추가했을 때 예측값 비교
+## 2. 전체 샘플로 회귀를 실시했을 때 오류가 나는 문제를 해결
+## 3. 각 tree 의 갯수별 차이를 분석
+## 4. feature selection 의 경우 tree 개수 별로 어떻게 나오는지 보여주기
+
 # import packages
 from tqdm import tqdm
 import pandas as pd
