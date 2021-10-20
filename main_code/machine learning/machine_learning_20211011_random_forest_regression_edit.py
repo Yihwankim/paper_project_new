@@ -24,13 +24,11 @@ from sklearn import set_config
 # 전체 데이터 중 1000개를 무작위로 sampling
 # 설명변수의 갯수는 72개: 물리적 특성변수 20개, 거리변수 3개, 지역 더미변수 25개, 시간 더미변수 24개
 # 종속변수는 per_Pr --> log(per_Pr)
-# df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
-# df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_full_sample(district+half).pkl') #  풀 샘플
-
-df_sample = pd.read_pickle('seoul_sampling_1000unit.pkl')  # 동일경로 가정
+#df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_full_sample(district+half).pkl')
+df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
 df_sample = df_sample.dropna()
-X = df_sample.iloc[:, 3:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
-y = df_sample.iloc[:, 2:3]  # per_Price (면적당 가격)을 종속변수로 입력
+X = df_sample.iloc[:, 1:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
+y = df_sample.iloc[:, 0:1]  # per_Price (면적당 가격)을 종속변수로 입력
 
 # 2. normalization
 y = np.log(y)  # per_Pr 에 log 를 취한 값을 최종 종속변수로 선정
@@ -40,6 +38,8 @@ y.columns = ['log_per_Pr']
 # 3. model 생성
 # 참고: https://statkclee.github.io/model/model-python-predictive-model.html
 rfr_outcome = pd.DataFrame()
+sum_variable_important = pd.DataFrame()
+
 r_square = []
 mean_sq_er = []
 root_mse = []
@@ -67,13 +67,23 @@ for number_estimator in [100, 150, 200]:  # 최적의 tree 갯수를 찾아보�
     score = model.score(x_train, y_train)  # 학습된 모델의 설명계수 값
     r_square.append(score)
 
+    # 5-1. model feature selection
+    X_columns = X.columns
+    importance_var = list(zip(X_columns, model.feature_importances_))
+    variable_important = pd.DataFrame(importance_var)
+    variable_important = variable_important.sort_values(by=[1], axis=0, ascending=False)
+    variable_important = variable_important.reset_index(drop='Ture')
+
+    sum_variable_important = pd.concat([sum_variable_important, variable_important], axis=1)
+
+
     # 6. model 예측
     y_pred = model.predict(x_test)  # test sample 의 값을 model 에 넣어 산출한 값
 
     # 7. model 평가
     mse = mean_squared_error(y_pred, y_test)
     rmse = mse**(1/2)
-    mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
+    mape = np.mean(np.abs((y_test['log_per_Pr'] - y_pred) / y_test['log_per_Pr'])) * 100
     mean_sq_er.append(mse)
     root_mse.append(rmse)
     mean_ape.append(mape)
@@ -101,5 +111,3 @@ rfr_outcome['RMSE'] = root_mse
 rfr_outcome['Correlation'] = correlation
 rfr_outcome['MAPE'] = mean_ape
 rfr_outcome = rfr_outcome.rename(index={0: 'case 1', 1: 'case 2', 2: 'case 3'})
-
-# edit 파일로 수정함
