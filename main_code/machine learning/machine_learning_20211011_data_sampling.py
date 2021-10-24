@@ -80,7 +80,8 @@ df_seoul_full.to_pickle('data_process/apt_data/machine_learning/seoul_full_sampl
 
 ########################################################################################################################
 # 전체 샘플을 train: 8, predict: 2 비율로 나누어두기
-df_seoul_full = df_seoul_full.sort_values(by=['time_param'])
+# df_seoul_full = df_full.copy()
+df_seoul_full = df_seoul_full.sort_values(by=['gu'])
 df_seoul_full = df_seoul_full.reset_index(drop='Ture')
 
 df_seoul_80 = df_seoul_full.sample(frac=0.8, random_state=2)  # 399106 개 데이터
