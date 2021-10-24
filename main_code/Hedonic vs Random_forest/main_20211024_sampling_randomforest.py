@@ -23,9 +23,13 @@ for i in range(len_gu):
     gu_dum.append(a)
 
 with_dummy = without_dummy + gu_dum + distance
+without_distance = without_dummy + gu_dum
 
 df_train_rfr_all = df_train[with_dummy]
 df_test_rfr_all = df_test[with_dummy]
+
+df_train_rfr_no_distance = df_train[without_distance]
+df_test_rfr_no_distance = df_test[without_distance]
 
 df_train_rfr_without = df_train[without_dummy]
 df_test_rfr_without = df_test[without_dummy]
@@ -33,6 +37,9 @@ df_test_rfr_without = df_test[without_dummy]
 ########################################################################################################################
 df_train_rfr_all.to_pickle('data_process/conclusion/sample/rfr_all_train_data.pkl')
 df_test_rfr_all.to_pickle('data_process/conclusion/sample/rfr_all_test_data.pkl')
+
+df_train_rfr_no_distance.to_pickle('data_process/conclusion/sample/rfr_no_distance_train_data.pkl')
+df_test_rfr_no_distance.to_pickle('data_process/conclusion/sample/rfr_no_distance_test_data.pkl')
 
 df_train_rfr_without.to_pickle('data_process/conclusion/sample/rfr_without_train_data.pkl')
 df_test_rfr_without.to_pickle('data_process/conclusion/sample/rfr_without_test_data.pkl')
