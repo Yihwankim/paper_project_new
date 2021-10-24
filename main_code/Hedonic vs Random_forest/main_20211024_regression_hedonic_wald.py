@@ -1,3 +1,6 @@
+# Hedonic regression 결과값 (2): interaction term 포함, (1): without interaction term 에 대해서 wald test 해보기
+# 주의) (2) - (1)
+
 # import packages
 from tqdm import tqdm
 import pandas as pd

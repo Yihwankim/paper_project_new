@@ -1,3 +1,5 @@
+# interaction term 에 대하여 Hedonic regression 실시
+
 # import packages
 from tqdm import tqdm
 import pandas as pd

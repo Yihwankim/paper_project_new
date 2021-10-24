@@ -1,3 +1,5 @@
+# without interaction term 에 대하여 regression 실시
+
 # import packages
 from tqdm import tqdm
 import pandas as pd

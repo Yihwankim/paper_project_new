@@ -1,3 +1,6 @@
+# 목표
+# 전체 샘플에 대해서 interaction term 을 포함한 결과값들에 대한 기술통계량 값 서술
+
 # import packages
 from tqdm import tqdm
 import pandas as pd
@@ -8,11 +11,12 @@ from scipy import stats
 
 ########################################################################################################################
 # summary
-df_full = pd.read_pickle('data_process/conclusion/sample/hedonic_full_data.pkl')
+
+df_full = pd.read_pickle('data_process/apt_data/seoul_including_all_variables.pkl')
 df_full = df_full.dropna()
 
-indep_var = ['old', 'old_sq', 'log_num', 'car_per', 'area', 'room', 'toilet', 'floor', 'floor_sq', 'first', 'H2',
-             'H3', 'T2', 'T3', 'C1', 'FAR', 'BC', 'Efficiency', 'dist_high', 'dist_sub', 'dist_park']
+indep_var = ['old', 'old_sq', 'num', 'car_per', 'area', 'room', 'toilet', 'floor', 'floor_sq', 'first', 'H1', 'H2',
+             'H3', 'T1', 'T2', 'T3', 'C1', 'FAR', 'BC', 'Efficiency', 'dist_high', 'dist_sub', 'dist_park']
 
 gu_dum = []
 time_dum = []
