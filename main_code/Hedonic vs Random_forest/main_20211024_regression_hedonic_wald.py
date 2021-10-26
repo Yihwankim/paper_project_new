@@ -48,7 +48,7 @@ Y = df_full['log_per_Pr']
 
 ols_model = sm.OLS(endog=Y, exog=X.values)
 df_full_res = ols_model.fit()
-df_full_result = df_full_res.summary(xname=X.columns.tolist())
+df_full_result1 = df_full_res.summary(xname=X.columns.tolist())
 
 # 회귀분석 결과값 출력
 df_full_output1 = pd.concat((df_full_res.params, df_full_res.bse, df_full_res.pvalues), axis=1)
@@ -58,9 +58,9 @@ x_variables = ['const'] + independent_part1
 
 df_full_output1['variables'] = x_variables
 
-df_full_output1['coef'] = round(df_full_output1['coef'], 4)
+'''df_full_output1['coef'] = round(df_full_output1['coef'], 4)
 df_full_output1['std'] = round(df_full_output1['std'], 4)
-df_full_output1['p-value'] = round(df_full_output1['p-value'], 4)
+df_full_output1['p-value'] = round(df_full_output1['p-value'], 4)'''
 
 df1 = pd.DataFrame()
 df1 = df_full_output1[['variables', 'coef', 'std', 'p-value']]
@@ -72,7 +72,7 @@ Y = df_full['log_per_Pr']
 
 ols_model = sm.OLS(endog=Y, exog=X.values)
 df_full_res = ols_model.fit()
-df_full_result = df_full_res.summary(xname=X.columns.tolist())
+df_full_result2 = df_full_res.summary(xname=X.columns.tolist())
 
 # 회귀분석 결과값 출력
 df_full_output2 = pd.concat((df_full_res.params, df_full_res.bse, df_full_res.pvalues), axis=1)
@@ -82,9 +82,9 @@ x_variables = ['const'] + independent_part2
 
 df_full_output2['variables'] = x_variables
 
-df_full_output2['coef'] = round(df_full_output2['coef'], 4)
+'''df_full_output2['coef'] = round(df_full_output2['coef'], 4)
 df_full_output2['std'] = round(df_full_output2['std'], 4)
-df_full_output2['p-value'] = round(df_full_output2['p-value'], 4)
+df_full_output2['p-value'] = round(df_full_output2['p-value'], 4)'''
 
 df2 = pd.DataFrame()
 df2 = df_full_output2[['variables', 'coef', 'std', 'p-value']]
