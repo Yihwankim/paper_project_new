@@ -1,4 +1,4 @@
-# interaction term 에 대하여 Hedonic regression 실시
+# with / without interaction term 에 대하여 Hedonic regression 실시
 
 # import packages
 from tqdm import tqdm
@@ -7,6 +7,7 @@ import numpy as np
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 
 ########################################################################################################################
 # regression_ data load
@@ -45,67 +46,86 @@ for i in range(len_gu):
         a = 'i' + str(i + 1) + ',' + str(j + 1)
         inter_dum.append(a)
 
-independent_part = indep_var + gu_dum[1:] + time_dum[1:] + inter_dum[1:]
+independent_part1 = indep_var + gu_dum[1:] + time_dum[1:]
+independent_part2 = indep_var + inter_dum[1:]
 
 # Hedonic regression with interaction term
-X_train = sm.add_constant(df_train[independent_part])
+# train & test 1: without interaction term
+# train & test 2: with interaction term
+X_train1 = sm.add_constant(df_train[independent_part1])
+X_train2 = sm.add_constant(df_train[independent_part2])
 Y_train = df_train['log_per_Pr']
 
-X_test = sm.add_constant(df_test[independent_part])
+X_test1 = sm.add_constant(df_test[independent_part1])
+X_test2 = sm.add_constant(df_test[independent_part2])
 Y_test = df_test['log_per_Pr']
 
-line_fitting = LinearRegression()
-line_fitting.fit(X_train, Y_train)
+line_fitting1 = LinearRegression()
+line_fitting1.fit(X_train1, Y_train)
+
+line_fitting2 = LinearRegression()
+line_fitting2.fit(X_train2, Y_train)
+
+# R-squared
+score = []
+a = line_fitting1.score(X_train1, Y_train)
+score.append(a)
+
+b = line_fitting2.score(X_train2, Y_train)
+score.append(b)
 
 ########################################################################################################################
 # Estimation
+Y_predict1 = line_fitting1.predict(X_test1)
+Y_predict2 = line_fitting2.predict(X_test2)
 
+# model 평가
+# 1. mean squared error
+mse = []
+a = mean_squared_error(Y_predict1, Y_test)
+mse.append(a)
 
+b = mean_squared_error(Y_predict2, Y_test)
+mse.append(b)
 
+# 2. root mean squared error
+rmse = []
+rmse.append(a**(1/2))
+rmse.append(b**(1/2))
 
-ols_model = sm.OLS(endog=Y, exog=X.values)
-df_full_res = ols_model.fit()
-df_full_result = df_full_res.summary(xname=X.columns.tolist())
+# 3. mean absolute percentage error
+mape = []
+a = np.mean(np.abs((Y_test - Y_predict1) / Y_test)) * 100
+mape.append(a)
 
-# 회귀분석 결과값 출력
-df_full_output = pd.concat((df_full_res.params, df_full_res.bse, df_full_res.pvalues), axis=1)
-df_full_output = df_full_output.rename(columns={0: 'coef', 1: 'std', 2: 'p-value'})
-x_variables = []
-x_variables = ['const'] + independent_part
+b = np.mean(np.abs((Y_test - Y_predict2) / Y_test)) * 100
+mape.append(b)
 
-df_full_output['variables'] = x_variables
+# 4. Correlation
+correlation = []
 
-df_full_output['coef'] = round(df_full_output['coef'], 4)
-df_full_output['std'] = round(df_full_output['std'], 4)
-df_full_output['p-value'] = round(df_full_output['p-value'], 4)
+df1 = pd.DataFrame({'y_true': Y_test, 'y_pred': Y_predict1})
+a = df1['y_true'].corr(df1['y_pred'])
+correlation.append(a)  # 예측값과 실제값 사이의 correlation
 
-df = pd.DataFrame()
-df = df_full_output[['variables', 'coef', 'std', 'p-value']]
-df['coef'] = df_full_output['coef'].astype(str)
-df['std'] = df_full_output['std'].astype(str)
+df2 = pd.DataFrame({'y_true': Y_test, 'y_pred': Y_predict2})
+b = df2['y_true'].corr(df2['y_pred'])
+correlation.append(b)  # 예측값과 실제값 사이의 correlation
 
-df['beta'] = df['coef'] + ' (' + df['std'] + ')'
+########################################################################################################################
+# outcome
+hedonic_outcome = pd.DataFrame()
+hedonic_outcome['r-squared'] = score
+hedonic_outcome['mse'] = mse
+hedonic_outcome['rmse'] = rmse
+hedonic_outcome['mape'] = mape
+hedonic_outcome['correlation'] = correlation
 
-df['sig'] = np.nan
-length = len(df['sig'])
+hedonic_outcome = hedonic_outcome.rename(index={0: 'without_interaction_term', 1: 'with_interaction_term'})
 
-for i in tqdm(range(length)):
-    if df['p-value'].iloc[i] <= 0.1:
-        df['sig'].iloc[i] = '*'
-
-for i in tqdm(range(length)):
-    if df['p-value'].iloc[i] <= 0.05:
-        df['sig'].iloc[i] = '**'
-
-for i in tqdm(range(length)):
-    if df['p-value'].iloc[i] <= 0.01:
-        df['sig'].iloc[i] = '***'
-
-
-df_output = df[['variables', 'beta', 'sig']]
 
 #######################################################################################################################
-df_output.to_excel('data_process/conclusion/regression_result/full_with_interactionterm_regression_ols_results.xlsx')
+hedonic_outcome.to_excel('data_process/conclusion/regression_result/hedonic_estimation.xlsx')
 
 
 
