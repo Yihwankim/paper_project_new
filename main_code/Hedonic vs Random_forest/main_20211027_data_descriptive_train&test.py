@@ -26,13 +26,14 @@ inter_dum = []
 
 len_gu = 25  # i
 len_time = 24  # j
-for i in range(len_gu):
+
+'''for i in range(len_gu):
     a = 'GU' + str(i+1)
     gu_dum.append(a)
 
 for i in range(len_time):
     b = 'Half' + str(i+1)
-    time_dum.append(b)
+    time_dum.append(b)'''
 
 for i in range(len_gu):
     for j in range(len_time):

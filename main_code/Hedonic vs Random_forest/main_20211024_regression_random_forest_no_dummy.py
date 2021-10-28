@@ -42,7 +42,7 @@ X = df_sample.iloc[:, 1:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한
 y = df_sample.iloc[:, 0:1]  # per_Price (면적당 가격)을 종속변수로 입력
 
 # 2. normalization
-y = np.log(y)  # per_Pr 에 log 를 취한 값을 최종 종속변수로 선정
+'''y = np.log(y)  # per_Pr 에 log 를 취한 값을 최종 종속변수로 선정
 y.columns = ['log_per_Pr']
 
 
@@ -125,7 +125,7 @@ rfr_outcome = rfr_outcome.rename(index={0: 'case 1: tree100', 1: 'case 2: tree15
 
 rfr_outcome.to_excel('data_process/conclusion/regression_result/rfr_sample_test.xlsx')
 
-sum_variable_important.to_excel('data_process/conclusion/regression_result/rfr_sample_test_featureselection.xlsx')
+sum_variable_important.to_excel('data_process/conclusion/regression_result/rfr_sample_test_featureselection.xlsx')'''
 ########################################################################################################################
 # full sample test
 # train 과 test 의 비율 => train : test = 8:2
@@ -209,5 +209,5 @@ rfr_outcome['RMSE'] = root_mse
 rfr_outcome['Correlation'] = correlation
 rfr_outcome['MAPE'] = mean_ape
 
-rfr_outcome.to_excel('data_process/conclusion/regression_result/rfr_full_test.xlsx')
-sum_variable_important.to_excel('data_process/conclusion/regression_result/rfr_full_test_featureselection.xlsx')
+rfr_outcome.to_excel('data_process/conclusion/regression_result/rfr_mini_test.xlsx')
+sum_variable_important.to_excel('data_process/conclusion/regression_result/rfr_mini_test_featureselection.xlsx')

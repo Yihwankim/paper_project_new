@@ -17,13 +17,27 @@ without_dummy = ['per_Pr', 'old', 'old_sq', 'num', 'car_per', 'area', 'room', 't
 distance = ['dist_high', 'dist_sub', 'dist_park']
 
 len_gu = 25
-gu_dum = []  # 25개 구 더미
-for i in range(len_gu):
-    a = 'GU' + str(i+1)
-    gu_dum.append(a)
 
-with_dummy = without_dummy + gu_dum + distance
-without_distance = without_dummy + gu_dum
+# 구 더미변수 label 로 표현
+df_train['district_param'] = np.nan
+length1 = len(df_train['gu'])
+for j in tqdm(range(len_gu)):
+    for i in range(length1):
+        if df_train['GU'+str(j+1)].iloc[i] == 1:
+            df_train['district_param'].iloc[i] = j+1
+
+df_test['district_param'] = np.nan
+length1 = len(df_test['gu'])
+for j in tqdm(range(len_gu)):
+    for i in range(length1):
+        if df_test['GU'+str(j+1)].iloc[i] == 1:
+            df_test['district_param'].iloc[i] = j+1
+
+with_dummy = without_dummy + distance
+with_dummy.append('district_param')
+
+without_distance = without_dummy.copy()
+without_distance.append('district_param')
 
 df_train_rfr_all = df_train[with_dummy]
 df_test_rfr_all = df_test[with_dummy]

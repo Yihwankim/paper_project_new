@@ -27,18 +27,18 @@ from sklearn import set_config
 # 전체 데이터 중 1000개를 무작위로 sampling
 # 설명변수의 갯수는 72개: 물리적 특성변수 20개, 거리변수 3개, 지역 더미변수 25개, 시간 더미변수 24개
 # 종속변수는 per_Pr --> log(per_Pr)
-df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
+# df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
 df_train = pd.read_pickle('data_process/conclusion/sample/rfr_no_distance_train_data.pkl')
 df_test = pd.read_pickle('data_process/conclusion/sample/rfr_no_distance_test_data.pkl')
 
-df_sample = df_sample.dropna()
+# df_sample = df_sample.dropna()
 df_train = df_train.dropna()
 df_test = df_test.dropna()
 
 ########################################################################################################################
-# Sample test
-X = df_sample.iloc[:, 1:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
-y = df_sample.iloc[:, 0:1]  # per_Price (면적당 가격)을 종속변수로 입력
+# X, Y 설정
+X = df_train.iloc[:, 1:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
+y = df_train.iloc[:, 1:]  # per_Price (면적당 가격)을 종속변수로 입력
 
 # full sample test
 # train 과 test 의 비율 => train : test = 8:2
@@ -63,7 +63,7 @@ root_mse = []
 correlation = []
 mean_ape = []
 
-features = int(np.sqrt(45))  # tree 에 들어가는 변수의 갯수 선정
+features = int(np.sqrt(20))  # tree 에 들어가는 변수의 갯수 선정
 
 model = RandomForestRegressor(n_estimators=100, max_features=features, criterion='mse', random_state=2)
 # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
