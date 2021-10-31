@@ -23,7 +23,7 @@ class PredictionANN:
 
         # ANN 모형 설정 input output 차원 맞추기에 주의
         self.model = tf.keras.Sequential([
-            tf.keras.layers.Dense(units=16, activation='relu', input_shape=(train_X.shape[-1],)),
+            tf.keras.layers.Dense(units=16, activation='relu', input_shape=(train_X.shape[-1])),
             tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(units=1, activation='sigmoid'),
         ])
