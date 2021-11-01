@@ -28,13 +28,13 @@ corr = []
 sample_name = ['rfr_without', 'rfr_no_distance', 'rfr_all']
 # with lat & long, no_distance, with full variable
 
-# StopWatch: 코드 시작
-time_PredictionANN_start = datetime.now()
-print("PredictionANN started at: " + str(time_PredictionANN_start))
-
 model_name = "NN"
 
 for i in sample_name:
+    # StopWatch: 코드 시작
+    time_PredictionANN_start = datetime.now()
+    print("PredictionANN started at: " + str(time_PredictionANN_start))
+
     df_train = pd.read_pickle('data_process/conclusion/sample/' + i + '_train_data.pkl')
     df_test = pd.read_pickle('data_process/conclusion/sample/' + i + '_test_data.pkl')
 
@@ -126,6 +126,11 @@ for i in sample_name:
     a = r2_score_train(Y_train, train_pred)
     r2_score_train(a)
 
+    # StopWatch: 코드 종료
+    time_PredictionANN_end = datetime.now()
+    print("PredictionANN finished at: " + str(time_PredictionANN_end))
+    print("Elapsed (in PredictionANN): " + str(time_PredictionANN_end - time_PredictionANN_start))
+
 nn_outcome = pd.DataFrame()
 nn_outcome['R_squared'] = r2_score_train
 nn_outcome['MSE'] = mse
@@ -133,3 +138,5 @@ nn_outcome['RMSE'] = rmse
 nn_outcome['Correlation'] = corr
 nn_outcome['MAPE'] = mape
 nn_outcome['est_R_squared'] = r2_score_predict
+
+nn_outcome.to_excel('data_process/conclusion/regression_result/nn_results.xlsx')
