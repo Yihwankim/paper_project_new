@@ -17,21 +17,16 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.metrics import r2_score
 
 #######################################################################################################################
-#df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
-df_train = pd.read_pickle('data_process/conclusion/sample/rfr_all_train_data.pkl')
-df_test = pd.read_pickle('data_process/conclusion/sample/rfr_all_test_data.pkl')
+# 결과값을 저장할 set
+r2_score_train = []
+re_score_predict = []
+mse = []
+rmse = []
+mape = []
+corr = []
 
-#df_sample = df_sample.dropna()
-df_train = df_train.dropna()
-df_test = df_test.dropna()
-
-X = df_train.iloc[:, 1:]
-y = np.log(df_train.iloc[:, 0:1])
-
-x_test = df_test.iloc[:, 1:]
-y_test = np.log(df_test.iloc[:, 0:1])
-
-x_train, x_valid, y_train, y_valid = train_test_split(X, y, test_size=0.25, random_state=2)
+sample_name = ['rfr_without', 'rfr_no_distance', 'rfr_all']
+# with lat & long, no_distance, with full variable
 
 # StopWatch: 코드 시작
 time_PredictionANN_start = datetime.now()
@@ -39,81 +34,102 @@ print("PredictionANN started at: " + str(time_PredictionANN_start))
 
 model_name = "NN"
 
+for i in sample_name:
+    df_train = pd.read_pickle('data_process/conclusion/sample/' + i + '_train_data.pkl')
+    df_test = pd.read_pickle('data_process/conclusion/sample/' + i + '_test_data.pkl')
 
-X_train = np.array(x_train)
-X_test = np.array(x_test)
-X_valid = np.array(x_valid)
+    # df_sample = df_sample.dropna()
+    df_train = df_train.dropna()
+    df_test = df_test.dropna()
 
-Y_train = np.array(y_train)
-Y_test = np.array(y_test)
-Y_valid = np.array(y_valid)
+    X = df_train.iloc[:, 1:]
+    y = np.log(df_train.iloc[:, 0:1])
 
-# 랜덤 시드 고정
-ann_seed_num = 50
-np.random.seed(ann_seed_num)
-tf.random.set_seed(ann_seed_num)
-rn.seed(ann_seed_num)
+    x_test = df_test.iloc[:, 1:]
+    y_test = np.log(df_test.iloc[:, 0:1])
 
-# ANN 모형 설정
+    x_train, x_valid, y_train, y_valid = train_test_split(X, y, test_size=0.25, random_state=2)
 
-model = Sequential()
+    # sample set to array
+    X_train = np.array(x_train)
+    X_test = np.array(x_test)
+    X_valid = np.array(x_valid)
 
-model.add(Dense(X_train.shape[1], activation='relu'))
-model.add(Dense(150, activation='relu'))
-# model.add(Dropout(0.2))
+    Y_train = np.array(y_train)
+    Y_test = np.array(y_test)
+    Y_valid = np.array(y_valid)
 
-model.add(Dense(75, activation='relu'))
-# model.add(Dropout(0.2))
+    # 랜덤 시드 고정
+    ann_seed_num = 50
+    np.random.seed(ann_seed_num)
+    tf.random.set_seed(ann_seed_num)
+    rn.seed(ann_seed_num)
 
-model.add(Dense(50, activation='relu'))
-# model.add(Dropout(0.2))
+    # ANN 모형 설정
 
-model.add(Dense(10, activation='relu'))
-model.add(Dropout(0.1))
-model.add(Dense(1))
+    model = Sequential()
 
-model.compile(optimizer=Adam(0.00001), loss='mse')
+    model.add(Dense(X_train.shape[1], activation='relu'))
+    model.add(Dense(150, activation='relu'))
+    # model.add(Dropout(0.2))
 
-r = model.fit(X_train, y_train, validation_data=(X_valid, Y_valid), batch_size=10, epochs=100)
+    model.add(Dense(75, activation='relu'))
+    # model.add(Dropout(0.2))
+
+    model.add(Dense(50, activation='relu'))
+    # model.add(Dropout(0.2))
+
+    model.add(Dense(10, activation='relu'))
+    model.add(Dropout(0.1))
+    model.add(Dense(1))
+
+    model.compile(optimizer=Adam(0.00001), loss='mse')
+
+    r = model.fit(X_train, y_train, validation_data=(X_valid, Y_valid), batch_size=10, epochs=100)
 
 #pd.DataFrame({'True_Values': y_test, 'Predicte_Values': pred}).hvplot.scatter(x='True_Values', y='Predicted_Values')
 
-test_pred = model.predict(X_test)
+    test_pred = model.predict(X_test)
 
-# 훈련 결과를 이용하여 예측 실시
-df_predict = pd.DataFrame(test_pred)
-df_predict.columns = ['per_Pr']
+    # 훈련 결과를 이용하여 예측 실시
+    df_predict = pd.DataFrame(test_pred)
+    df_predict.columns = ['per_Pr']
 
-# test value
-df_test = pd.DataFrame(Y_test)
-df_test.columns = ['per_Pr']
+    # test value
+    df_test = pd.DataFrame(Y_test)
+    df_test.columns = ['per_Pr']
 
-# 성과평가
-mse = mean_squared_error(test_pred, Y_test)
-rmse = mse**(1/2)
-mape = np.mean(np.abs((Y_test - test_pred) / Y_test)) * 100
+    # 성과평가
+    r2_score_train = []
+    r2_score_predict = []
 
-df = pd.DataFrame({'y_true': df_test['per_Pr'], 'y_pred': df_predict['per_Pr']})
-corr = df['y_pred'].corr(df['y_true'])
+    a = mean_squared_error(test_pred, Y_test)
+    mse.append(a)
 
-print('mean_squared_error : ', mse)
-print('root_mean_squared_error : ', rmse)
-print('mean_absolute_percentage_error : ', mape)
-print('correlation : ', corr)
+    a = mse**(1/2)
+    rmse.append(a)
 
+    a = np.mean(np.abs((Y_test - test_pred) / Y_test)) * 100
+    mape.append(a)
 
-a = pd.DataFrame(r.history).plot()
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
+    df = pd.DataFrame({'y_true': df_test['per_Pr'], 'y_pred': df_predict['per_Pr']})
+    a = df['y_pred'].corr(df['y_true'])
+    corr.append(a)
 
-# r-square 도출
-r2_score(Y_test, test_pred)
-# batch 1: 실제값, 예측값: 0.8948353606750048
-# batch 10: 실제값, 예측값 0.7810577059355858
+    print(model.summary())
 
-train_pred = model.predict(X_train)
-r2_score(Y_train, train_pred)
-# batch 1 훈련샘플에 대한 실제값, 예측값: 0.8961584672923316
-# batch 10: 훈련샘플에 대한 실제값 예측값 0.7808119947625769
+    # r-square 도출
+    a = r2_score(Y_test, test_pred)
+    r2_score_predict.append(a)
 
-model.summary()
+    train_pred = model.predict(X_train)
+    a = r2_score_train(Y_train, train_pred)
+    r2_score_train(a)
+
+nn_outcome = pd.DataFrame()
+nn_outcome['R_squared'] = r2_score_train
+nn_outcome['MSE'] = mse
+nn_outcome['RMSE'] = rmse
+nn_outcome['Correlation'] = corr
+nn_outcome['MAPE'] = mape
+nn_outcome['est_R_squared'] = r2_score_predict
