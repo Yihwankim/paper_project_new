@@ -85,6 +85,11 @@ for i in tqdm(range(length)):
 
 df_output = df[['variables', 'beta', 'sig']]
 
+# VIF test
+vif = pd.DataFrame()
+vif['vif'] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+vif['variable'] = X.columns
+
 #######################################################################################################################
 df_output.to_excel('data_process/conclusion/regression_result/full_with_interactionterm_regression_ols_results_edit.xlsx')
 
