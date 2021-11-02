@@ -40,7 +40,7 @@ for i in range(len_gu):
         inter_dum.append(a)
 ########################################################################################################################
 independent_part1 = indep_var + gu_dum[1:] + time_dum[1:]
-independent_part2 = indep_var + gu_dum[1:] + time_dum[1:] + inter_dum[1:]
+independent_part2 = indep_var + inter_dum[1:]
 
 # Hedonic regression without interaction term
 X = sm.add_constant(df_full[independent_part1])
@@ -89,7 +89,8 @@ df_full_output2['p-value'] = round(df_full_output2['p-value'], 4)'''
 df2 = pd.DataFrame()
 df2 = df_full_output2[['variables', 'coef', 'std', 'p-value']]
 
-df2 = df2.iloc[:69, :]
+df1 = df1.iloc[:22, :]
+df2 = df2.iloc[:22, :]
 
 ########################################################################################################################
 # wald test

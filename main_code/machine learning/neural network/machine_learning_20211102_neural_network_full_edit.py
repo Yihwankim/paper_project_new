@@ -19,36 +19,36 @@ from sklearn.metrics import r2_score
 #######################################################################################################################
 # 결과값을 저장할 set
 r2_score_train = []
-re_score_predict = []
+r2_score_predict = []
 mse = []
 rmse = []
 mape = []
 corr = []
 
-sample_name = ['rfr_without', 'rfr_no_distance', 'rfr_all']
-# with lat & long, no_distance, with full variable
+sample_name = ['without', 'with']
+# without interaction term, with interaction term
 
 model_name = "NN"
+
+i = sample_name[0]
 
 for i in sample_name:
     # StopWatch: 코드 시작
     time_PredictionANN_start = datetime.now()
     print("PredictionANN started at: " + str(time_PredictionANN_start))
 
-    df_train = pd.read_pickle('data_process/conclusion/sample/' + i + '_train_data.pkl')
-    df_test = pd.read_pickle('data_process/conclusion/sample/' + i + '_test_data.pkl')
+    df_data = pd.read_pickle('data_process/conclusion/NN/normalization_' + i + '_interaction.pkl')
+    # df_test = pd.read_pickle('data_process/conclusion/NN/normalization_without_interaction.pkl')
 
-    # df_sample = df_sample.dropna()
-    df_train = df_train.dropna()
-    df_test = df_test.dropna()
+    df_data = df_data.dropna()
+    # df_train = df_train.dropna()
+    # df_test = df_test.dropna()
 
-    X = df_train.iloc[:, 1:]
-    y = np.log(df_train.iloc[:, 0:1])
+    X = df_data.iloc[:, 1:]
+    y = df_data.iloc[:, 0:1]
 
-    x_test = df_test.iloc[:, 1:]
-    y_test = np.log(df_test.iloc[:, 0:1])
-
-    x_train, x_valid, y_train, y_valid = train_test_split(X, y, test_size=0.25, random_state=2)
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2)
+    x_train, x_valid, y_train, y_valid = train_test_split(x_train, y_train, test_size=0.25, random_state=2)
 
     # sample set to array
     X_train = np.array(x_train)
@@ -100,14 +100,11 @@ for i in sample_name:
     df_test.columns = ['per_Pr']
 
     # 성과평가
-    r2_score_train = []
-    r2_score_predict = []
-
     a = mean_squared_error(test_pred, Y_test)
     mse.append(a)
 
-    a = mse**(1/2)
-    rmse.append(a)
+    b = a**(1/2)
+    rmse.append(b)
 
     a = np.mean(np.abs((Y_test - test_pred) / Y_test)) * 100
     mape.append(a)
@@ -123,8 +120,12 @@ for i in sample_name:
     r2_score_predict.append(a)
 
     train_pred = model.predict(X_train)
-    a = r2_score_train(Y_train, train_pred)
-    r2_score_train(a)
+    a = r2_score(Y_train, train_pred)
+    r2_score_train.append(a)
+
+    a = pd.DataFrame(r.history).plot()
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
 
     # StopWatch: 코드 종료
     time_PredictionANN_end = datetime.now()
@@ -139,4 +140,6 @@ nn_outcome['Correlation'] = corr
 nn_outcome['MAPE'] = mape
 nn_outcome['est_R_squared'] = r2_score_predict
 
-nn_outcome.to_excel('data_process/conclusion/regression_result/nn_results.xlsx')
+
+
+nn_outcome.to_excel('data_process/conclusion/regression_result/nn_results_normalization.xlsx')
