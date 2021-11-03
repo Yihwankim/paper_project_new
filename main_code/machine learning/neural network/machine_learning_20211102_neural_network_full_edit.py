@@ -69,17 +69,17 @@ for i in sample_name:
 
     model = Sequential()
 
-    model.add(Dense(X_train.shape[1], activation='relu'))
-    model.add(Dense(150, activation='relu'))
+    model.add(Dense(X_train.shape[1],  kernel_initializer='normal', activation='relu'))
+    model.add(Dense(150,  kernel_initializer='normal', activation='relu'))
     # model.add(Dropout(0.2))
 
-    model.add(Dense(75, activation='relu'))
+    model.add(Dense(75,  kernel_initializer='normal', activation='relu'))
     # model.add(Dropout(0.2))
 
-    model.add(Dense(50, activation='relu'))
+    model.add(Dense(50,  kernel_initializer='normal', activation='relu'))
     # model.add(Dropout(0.2))
 
-    model.add(Dense(10, activation='relu'))
+    model.add(Dense(10,  kernel_initializer='normal', activation='relu'))
     model.add(Dropout(0.1))
     model.add(Dense(1))
 
