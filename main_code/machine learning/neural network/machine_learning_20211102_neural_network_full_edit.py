@@ -299,4 +299,5 @@ nn_outcome_norm['Correlation'] = corr
 nn_outcome_norm['MAPE'] = mape
 nn_outcome_norm['est_R_squared'] = r2_score_predict
 
+
 nn_outcome_norm.to_excel('data_process/conclusion/regression_result/nn_results_nomalization.xlsx')
