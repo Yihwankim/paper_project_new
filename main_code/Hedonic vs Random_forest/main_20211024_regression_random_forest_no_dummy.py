@@ -18,6 +18,7 @@ from sklearn.metrics import mean_squared_error  # 평균제곱오차
 from sklearn.preprocessing import scale
 import matplotlib.pyplot as plt
 from sklearn import set_config
+from sklearn.metrics import r2_score
 
 ########################################################################################################################
 # 전체적인 모델링 순서
@@ -28,21 +29,21 @@ from sklearn import set_config
 # 설명변수의 갯수는 72개: 물리적 특성변수 20개, 거리변수 3개, 지역 더미변수 25개, 시간 더미변수 24개
 # 종속변수는 per_Pr --> log(per_Pr)
 
-df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
+# df_sample = pd.read_pickle('data_process/apt_data/machine_learning/seoul_sampling_1000unit.pkl')  # 1000 개 서브샘플
 df_train = pd.read_pickle('data_process/conclusion/sample/rfr_without_train_data.pkl')
 df_test = pd.read_pickle('data_process/conclusion/sample/rfr_without_test_data.pkl')
 
-df_sample = df_sample.dropna()
+# df_sample = df_sample.dropna()
 df_train = df_train.dropna()
 df_test = df_test.dropna()
 
 ########################################################################################################################
 # Sample test
-X = df_sample.iloc[:, 1:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
+'''X = df_sample.iloc[:, 1:]  # 'gu' 와 'dong' 그리고 종속변수를 제외한 나머지 값들을 설명변수로 입력
 y = df_sample.iloc[:, 0:1]  # per_Price (면적당 가격)을 종속변수로 입력
 
 # 2. normalization
-'''y = np.log(y)  # per_Pr 에 log 를 취한 값을 최종 종속변수로 선정
+y = np.log(y)  # per_Pr 에 log 를 취한 값을 최종 종속변수로 선정
 y.columns = ['log_per_Pr']
 
 
@@ -149,6 +150,7 @@ mean_sq_er = []
 root_mse = []
 correlation = []
 mean_ape = []
+r_square2 = []
 
 features = int(np.sqrt(19))  # tree 에 들어가는 변수의 갯수 선정
 
@@ -166,7 +168,7 @@ score = model.score(x_train, y_train)  # 학습된 모델의 설명계수 값
 r_square.append(score)
 
 # 5-1. model feature selection
-X_columns = X.columns
+X_columns = x_train.columns
 importance_var = list(zip(X_columns, model.feature_importances_))
 variable_important = pd.DataFrame(importance_var)
 variable_important = variable_important.sort_values(by=[1], axis=0, ascending=False)
@@ -185,6 +187,9 @@ mape = np.mean(np.abs((y_test['log_per_Pr'] - y_pred) / y_test['log_per_Pr'])) *
 mean_sq_er.append(mse)
 root_mse.append(rmse)
 mean_ape.append(mape)
+
+est_score = r2_score(y_test['log_per_Pr'], y_pred)
+r_square2.append(est_score)
 
 df = pd.DataFrame({'y_true': y_test['log_per_Pr'], 'y_pred': y_pred})
 cor = df['y_true'].corr(df['y_pred'])
@@ -208,6 +213,8 @@ rfr_outcome['MSE'] = mean_sq_er
 rfr_outcome['RMSE'] = root_mse
 rfr_outcome['Correlation'] = correlation
 rfr_outcome['MAPE'] = mean_ape
+rfr_outcome['est_R_squared'] = r_square2
 
-rfr_outcome.to_excel('data_process/conclusion/regression_result/rfr_mini_test.xlsx')
+rfr_outcome.to_excel('data_process/conclusion/regression_result/rfr_with_lat_long_test.xlsx')
 sum_variable_important.to_excel('data_process/conclusion/regression_result/rfr_mini_test_featureselection.xlsx')
+
