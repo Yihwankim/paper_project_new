@@ -8,6 +8,7 @@ import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 
 ########################################################################################################################
 # regression_ data load
@@ -112,6 +113,13 @@ df2 = pd.DataFrame({'y_true': Y_test, 'y_pred': Y_predict2})
 b = df2['y_true'].corr(df2['y_pred'])
 correlation.append(b)  # 예측값과 실제값 사이의 correlation
 
+# 5. estimated R-squared
+r_square2 = []
+a = r2_score(Y_test, Y_predict1)
+r_square2.append(a)
+
+b = r2_score(Y_test, Y_predict2)
+r_square2.append(b)
 ########################################################################################################################
 # outcome
 hedonic_outcome = pd.DataFrame()
@@ -120,6 +128,7 @@ hedonic_outcome['mse'] = mse
 hedonic_outcome['rmse'] = rmse
 hedonic_outcome['mape'] = mape
 hedonic_outcome['correlation'] = correlation
+hedonic_outcome['est_R_squared'] = r_square2
 
 hedonic_outcome = hedonic_outcome.rename(index={0: 'without_interaction_term', 1: 'with_interaction_term'})
 

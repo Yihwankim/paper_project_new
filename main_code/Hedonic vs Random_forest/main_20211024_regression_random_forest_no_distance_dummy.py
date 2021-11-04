@@ -18,6 +18,7 @@ from sklearn.metrics import mean_squared_error  # 평균제곱오차
 from sklearn.preprocessing import scale
 import matplotlib.pyplot as plt
 from sklearn import set_config
+from sklearn.metrics import r2_score
 
 ########################################################################################################################
 # 전체적인 모델링 순서
@@ -62,6 +63,7 @@ mean_sq_er = []
 root_mse = []
 correlation = []
 mean_ape = []
+r_square2 = []
 
 features = int(np.sqrt(20))  # tree 에 들어가는 변수의 갯수 선정
 
@@ -99,6 +101,9 @@ mean_sq_er.append(mse)
 root_mse.append(rmse)
 mean_ape.append(mape)
 
+est_score = r2_score(y_test['log_per_Pr'], y_pred)
+r_square2.append(est_score)
+
 df = pd.DataFrame({'y_true': y_test['log_per_Pr'], 'y_pred': y_pred})
 cor = df['y_true'].corr(df['y_pred'])
 correlation.append(cor)  # 예측값과 실제값 사이의 correlation
@@ -121,6 +126,7 @@ rfr_outcome['MSE'] = mean_sq_er
 rfr_outcome['RMSE'] = root_mse
 rfr_outcome['Correlation'] = correlation
 rfr_outcome['MAPE'] = mean_ape
+rfr_outcome['est_R_squared'] = r_square2
 
 rfr_outcome.to_excel('data_process/conclusion/regression_result/rfr_full_test_no_distance.xlsx')
 sum_variable_important.to_excel('data_process/conclusion/regression_result/rfr_full_test_featureselection_no_distance.xlsx')
