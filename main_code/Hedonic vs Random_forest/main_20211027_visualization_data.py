@@ -4,6 +4,7 @@ import pandas as pd
 from urllib.request import urlopen
 import json
 
+import plotly as plt
 import plotly.io as pio
 import plotly.express as px #빠르게 사용
 import plotly.graph_objects as go  #디테일하게 설정해야할때
@@ -24,7 +25,7 @@ df_test = df_test.dropna()
 full_fig = px.scatter_mapbox(df_full, lat='lat', lon="long", color='gu', size="area",
                              color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=10,
                              mapbox_style="carto-positron")
-full_fig.show()
+plt.offline.plot(full_fig, filename='full_fig.html')
 
 # train
 train_fig = px.scatter_mapbox(df_train, lat='lat', lon="long", color='gu', size="area",
