@@ -67,6 +67,8 @@ line_fitting1.fit(X_train1, Y_train)
 line_fitting2 = LinearRegression()
 line_fitting2.fit(X_train2, Y_train)
 
+x_index = pd.read_excel('data_process/conclusion/summary_full_rfr.xlsx', header=0, skipfooter=0)
+x_index = pd.read_excel('data_process/conclusion/summary_rfr.xlsx', header=0, skipfooter=0)
 line_fitting1.predict()
 line_fitting2.predict()
 
