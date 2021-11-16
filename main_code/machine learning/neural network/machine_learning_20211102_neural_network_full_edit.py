@@ -68,7 +68,7 @@ for i in sample_name:
 
     model = Sequential()
 
-    # No nomalization
+'''    # No nomalization
     model.add(Dense(X_train.shape[1], activation='relu'))
     model.add(Dense(150, activation='relu'))
     # model.add(Dropout(0.2))
@@ -81,9 +81,9 @@ for i in sample_name:
 
     model.add(Dense(10, activation='relu'))
     model.add(Dropout(0.1))
-    model.add(Dense(1))
+    model.add(Dense(1))'''
 
-'''    # Nomalization
+    # Nomalization
     model.add(Dense(X_train.shape[1], kernel_initializer = 'normal', activation='relu'))
     model.add(Dense(150, kernel_initializer = 'normal', activation='relu'))
     # model.add(Dropout(0.2))
@@ -96,7 +96,7 @@ for i in sample_name:
 
     model.add(Dense(10, kernel_initializer = 'normal', activation='relu'))
     model.add(Dropout(0.1))
-    model.add(Dense(1))'''
+    model.add(Dense(1))
 
     model.compile(
         optimizer=Adam(0.00001),
@@ -157,7 +157,7 @@ nn_outcome['Correlation'] = corr
 nn_outcome['MAPE'] = mape
 nn_outcome['est_R_squared'] = r2_score_predict
 
-nn_outcome.to_excel('data_process/conclusion/regression_result/nn_results_no_nomalization.xlsx')
+# nn_outcome.to_excel('data_process/conclusion/regression_result/nn_results_no_nomalization.xlsx')
 
 #######################################################################################################################
 # 결과값을 저장할 set

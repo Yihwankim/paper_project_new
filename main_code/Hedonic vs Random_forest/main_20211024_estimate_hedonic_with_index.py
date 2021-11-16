@@ -67,12 +67,59 @@ line_fitting1.fit(X_train1, Y_train)
 line_fitting2 = LinearRegression()
 line_fitting2.fit(X_train2, Y_train)
 
-x_index = pd.read_excel('data_process/conclusion/summary_full_rfr.xlsx', header=0, skipfooter=0)
-x_index = pd.read_excel('data_process/conclusion/summary_rfr.xlsx', header=0, skipfooter=0)
-line_fitting1.predict()
-line_fitting2.predict()
+########################################################################################################################
+indep_var = ['const', 'old', 'old_sq', 'log_num', 'car_per', 'area', 'room', 'toilet',
+             'floor', 'floor_sq', 'first', 'H2', 'H3', 'T2', 'T3', 'C1',
+             'FAR', 'BC', 'Efficiency', 'dist_high', 'dist_sub', 'dist_park']
+independent_part1 = indep_var + gu_dum[1:] + time_dum[1:]
+independent_part2 = indep_var + inter_dum[1:]
 
-# hedonic_outcome.to_excel('data_process/conclusion/regression_result/hedonic_estimation.xlsx')
+# Without interaction term estimate
+df_data1 = pd.read_excel('data_process/conclusion/NN/nn_index_data_no_interaction.xlsx', header=0, skipfooter=0)
+df_data1['H3'] = 0.5
+df_data1['T3'] = 0.5
+df_data1['const'] = 1.0
+
+df_data1 = df_data1.drop(['H1', 'T1'], axis=1)
+
+X_index_without = df_data1[independent_part1]
+
+y_predict_without = line_fitting1.predict(X_index_without)
+y_predict_without = pd.DataFrame(y_predict_without)
+y_predict_without.columns = ['without']
+
+df_without = y_predict_without.copy()
+df_without['real_values'] = np.exp(df_without['without'])
+df_without['index'] = (df_without['real_values']/df_without['real_values'].loc[0]) *100
+
+df_without.to_excel('data_process/conclusion/regression_result/hedonic_index_without_estimate.xlsx')
+
+########################################################################################################################
+# Without interaction term estimate
+df_data2 = pd.read_excel('data_process/conclusion/NN/nn_index_data_interaction.xlsx', header=0, skipfooter=0)
+df_data2['H3'] = 0.5
+df_data2['T3'] = 0.5
+df_data2['const'] = 1.0
+
+df_data2 = df_data2.drop(['H1', 'T1'], axis=1)
+
+X_index_with = df_data2[independent_part2]
+
+y_predict_with = line_fitting2.predict(X_index_with)
+y_predict_with = pd.DataFrame(y_predict_with)
+y_predict_with.columns = ['with']
+
+df_with = y_predict_with.copy()
+df_with['real_values'] = np.exp(df_with['with'])
+
+length = 600
+df_with['index'] = 0
+for i in range(length):
+    df_with['index'].loc[i] = (df_with['real_values'].loc[i]/df_with['real_values'].loc[int(i/24)*24]) * 100
+
+
+df_with.to_excel('data_process/conclusion/regression_result/hedonic_index_with_estimate.xlsx')
+
 
 
 
