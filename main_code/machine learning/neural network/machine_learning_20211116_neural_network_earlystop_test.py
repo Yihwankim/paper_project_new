@@ -71,7 +71,7 @@ for i in sample_name:
     rn.seed(ann_seed_num)
 
     # ANN 모형 설정
-    # epoch = 250
+    # epoch = 50
     model = Sequential()
 
     # Normalization
@@ -93,7 +93,7 @@ for i in sample_name:
         optimizer=Adam(0.00001),
         loss=tf.keras.losses.mean_squared_error)
 
-    r = model.fit(X_train, y_train, validation_data=(X_valid, Y_valid), batch_size=10, epochs=250)
+    r = model.fit(X_train, y_train, validation_data=(X_valid, Y_valid), batch_size=10, epochs=50)
 
     test_pred = model.predict(X_test)
 
@@ -131,7 +131,7 @@ for i in sample_name:
 
 ########################################################################################################################
     # ANN 모형 설정
-    # epoch = 300
+    # epoch = 100
     model = Sequential()
 
     # Normalization
@@ -153,7 +153,7 @@ for i in sample_name:
         optimizer=Adam(0.00001),
         loss=tf.keras.losses.mean_squared_error)
 
-    r = model.fit(X_train, y_train, validation_data=(X_valid, Y_valid), batch_size=10, epochs=300)
+    r = model.fit(X_train, y_train, validation_data=(X_valid, Y_valid), batch_size=10, epochs=100)
 
     test_pred = model.predict(X_test)
 
@@ -190,7 +190,7 @@ for i in sample_name:
     r2_score_train.append(a)
 
 ########################################################################################################################
-'''    # ANN 모형 설정
+    # ANN 모형 설정
     # epoch = 150
     model = Sequential()
 
@@ -307,7 +307,7 @@ for i in sample_name:
 
     train_pred = model.predict(X_train)
     a = r2_score(Y_train, train_pred)
-    r2_score_train.append(a)'''
+    r2_score_train.append(a)
 
     # StopWatch: 코드 종료
     time_PredictionANN_end = datetime.now()
@@ -325,4 +325,4 @@ nn_outcome['MAPE'] = mape
 nn_outcome['est_R_squared'] = r2_score_predict
 
 
-nn_outcome.to_excel('data_process/conclusion/NN/earlystop_NN_results.xlsx')
+nn_outcome.to_excel('data_process/conclusion/NN/comparing_NN_results.xlsx')
