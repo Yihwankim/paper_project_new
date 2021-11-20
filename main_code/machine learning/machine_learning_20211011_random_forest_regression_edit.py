@@ -52,53 +52,53 @@ root_mse = []
 correlation = []
 mean_ape = []
 
-features = int(np.sqrt(72))  # tree 에 들어가는 변수의 갯수 선정
+# features = int(np.sqrt(19))  # tree 에 들어가는 변수의 갯수 선정
+for features in [int(np.sqrt(19)), 8, 12, 16]:
+    for number_estimator in [100, 150, 200]:  # 최적의 tree 갯수를 찾아보기 위해 100, 150, 200개에 대해 test
+        print('Case: number of estimators = ' + str(number_estimator))
+        model = RandomForestRegressor(n_estimators=number_estimator, max_features=features, criterion='mse', random_state=2)
+        # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
+        # max_features: 무작위로 선택할 Feature 의 개수
+        # criterion: model 선정 기준_ mse: mean squared error
+        # random_state: 일관성있는 샘플링을 위함
 
-for number_estimator in [100, 150, 200]:  # 최적의 tree 갯수를 찾아보기 위해 100, 150, 200개에 대해 test
-    print('Case: number of estimators = ' + str(number_estimator))
-    model = RandomForestRegressor(n_estimators=number_estimator, max_features=features, criterion='mse', random_state=2)
-    # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
-    # max_features: 무작위로 선택할 Feature 의 개수
-    # criterion: model 선정 기준_ mse: mean squared error
-    # random_state: 일관성있는 샘플링을 위함
+        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2)
+        # test_size => test sample 의 비율
+        # train 과 test 의 비율 => train : test = 8:2
 
-    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2)
-    # test_size => test sample 의 비율
-    # train 과 test 의 비율 => train : test = 8:2
+        # 4. model 학습
+        model.fit(x_train, y_train)  # 상기 조건대로 random_forest_regression_model 학습
 
-    # 4. model 학습
-    model.fit(x_train, y_train)  # 상기 조건대로 random_forest_regression_model 학습
+        # 5. model 검증
+        score = model.score(x_train, y_train)  # 학습된 모델의 설명계수 값
+        r_square.append(score)
 
-    # 5. model 검증
-    score = model.score(x_train, y_train)  # 학습된 모델의 설명계수 값
-    r_square.append(score)
+        # 5-1. model feature selection
+        X_columns = X.columns
+        importance_var = list(zip(X_columns, model.feature_importances_))
+        variable_important = pd.DataFrame(importance_var)
+        variable_important = variable_important.sort_values(by=[1], axis=0, ascending=False)
+        variable_important = variable_important.reset_index(drop='Ture')
 
-    # 5-1. model feature selection
-    X_columns = X.columns
-    importance_var = list(zip(X_columns, model.feature_importances_))
-    variable_important = pd.DataFrame(importance_var)
-    variable_important = variable_important.sort_values(by=[1], axis=0, ascending=False)
-    variable_important = variable_important.reset_index(drop='Ture')
-
-    sum_variable_important = pd.concat([sum_variable_important, variable_important], axis=1)
+        sum_variable_important = pd.concat([sum_variable_important, variable_important], axis=1)
 
 
-    # 6. model 예측
-    y_pred = model.predict(x_test)  # test sample 의 값을 model 에 넣어 산출한 값
+        # 6. model 예측
+        y_pred = model.predict(x_test)  # test sample 의 값을 model 에 넣어 산출한 값
 
-    # 7. model 평가
-    mse = mean_squared_error(y_pred, y_test)
-    rmse = mse**(1/2)
-    mape = np.mean(np.abs((y_test['log_per_Pr'] - y_pred) / y_test['log_per_Pr'])) * 100
-    mean_sq_er.append(mse)
-    root_mse.append(rmse)
-    mean_ape.append(mape)
+        # 7. model 평가
+        mse = mean_squared_error(y_pred, y_test)
+        rmse = mse**(1/2)
+        mape = np.mean(np.abs((y_test['log_per_Pr'] - y_pred) / y_test['log_per_Pr'])) * 100
+        mean_sq_er.append(mse)
+        root_mse.append(rmse)
+        mean_ape.append(mape)
 
-    df = pd.DataFrame({'y_true': y_test['log_per_Pr'], 'y_pred': y_pred})
-    cor = df['y_true'].corr(df['y_pred'])
-    correlation.append(cor)  # 예측값과 실제값 사이의 correlation
+        df = pd.DataFrame({'y_true': y_test['log_per_Pr'], 'y_pred': y_pred})
+        cor = df['y_true'].corr(df['y_pred'])
+        correlation.append(cor)  # 예측값과 실제값 사이의 correlation
 
-    # 8. plot 그리기
+'''    # 8. plot 그리기
     # 참고: https://www.datatechnotes.com/2020/09/regression-example-with-randomforestregressor.html
     x_axis = range(len(df['y_true']))
     plt.plot(x_axis, df['y_true'], linewidth=1, label="original")
@@ -109,11 +109,16 @@ for number_estimator in [100, 150, 200]:  # 최적의 tree 갯수를 찾아보�
     plt.legend(loc='best', fancybox=True, shadow=True)
     plt.grid(True)
     plt.figure()
-
+'''
 # 9. 결과값
 rfr_outcome['R_squared'] = r_square
 rfr_outcome['MSE'] = mean_sq_er
 rfr_outcome['RMSE'] = root_mse
 rfr_outcome['Correlation'] = correlation
 rfr_outcome['MAPE'] = mean_ape
-rfr_outcome = rfr_outcome.rename(index={0: 'case 1', 1: 'case 2', 2: 'case 3'})
+rfr_outcome = rfr_outcome.rename(index={0: 'case 4-100', 1: 'case 4-150', 2: 'case 4-200',
+                                        3: 'case 8-100', 4: 'case 8-150', 5: 'case 8-200',
+                                        6: 'case 12-100', 7: 'case 12-150', 8: 'case 12-200',
+                                        9: 'case 16-100', 10: 'case 16-150', 11: 'case 16-200'})
+
+rfr_outcome.to_excel('data_process/conclusion/sample_test/rfr_sample_test_features_tree_num.xlsx')
