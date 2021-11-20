@@ -61,9 +61,9 @@ correlation = []
 mean_ape = []
 r_square2 = []
 
-features = int(np.sqrt(19))  # tree 에 들어가는 변수의 갯수 선정
+features = 8  # tree 에 들어가는 변수의 갯수 선정
 
-model = RandomForestRegressor(n_estimators=100, max_features=features, criterion='mse', random_state=2)
+model = RandomForestRegressor(n_estimators=150, max_features=features, criterion='mse', random_state=2)
 # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
 # max_features: 무작위로 선택할 Feature 의 개수
 # criterion: model 선정 기준_ mse: mean squared error
@@ -73,15 +73,32 @@ model = RandomForestRegressor(n_estimators=100, max_features=features, criterion
 model.fit(x_train, y_train)  # 상기 조건대로 random_forest_regression_model 학습
 
 # 5. model 예측
-df_data_index = pd.read_excel('data_process/conclusion/summary_rfr.xlsx', header=0, skipfooter=0)
-x_index = df_data_index.iloc[:, 1:]
-y_index = model.predict(x_index)  # test sample 의 값을 model 에 넣어 산출한 값
+df_data_basic_index = pd.read_excel('data_process/conclusion/predict_data/index_predict_input/basic/summary_rfr.xlsx',
+                                    header=0, skipfooter=0)
+x_index = df_data_basic_index.iloc[:, 1:]
+y_basic_index = model.predict(x_index)  # test sample 의 값을 model 에 넣어 산출한 값
+
+########################################################################################################################
+df_data_trend_index = pd.read_excel\
+    ('data_process/conclusion/predict_data/index_predict_input/trend/with_lat_long_rfr_edit.xlsx',
+     header=0, skipfooter=0)
+x_index = df_data_trend_index.iloc[:, 1:]
+y_trend_index = model.predict(x_index)
+
 
 # 6. index 도출 및 출력
-df_index = pd.DataFrame(y_index)
-df_index.columns = ['raw_value']
+df_index_basic = pd.DataFrame(y_basic_index)
+df_index_basic.columns = ['raw_value']
 
-df_index['real_value'] = np.exp(df_index['raw_value'])
-df_index['index'] = (df_index['real_value']/df_index['real_value'].loc[0]) * 100
+df_index_basic['real_value'] = np.exp(df_index_basic['raw_value'])
+df_index_basic['index'] = (df_index_basic['real_value']/df_index_basic['real_value'].loc[0]) * 100
 
-df_index.to_excel('data_process/conclusion/rfr_index_1.xlsx')
+df_index_basic.to_excel('data_process/conclusion/predict_data/index_predict_output/basic/rfr_basic_latlong_index.xlsx')
+########################################################################################################################
+df_index_trend = pd.DataFrame(y_trend_index)
+df_index_trend.columns = ['raw_value']
+
+df_index_trend['real_value'] = np.exp(df_index_trend['raw_value'])
+df_index_trend['index'] = (df_index_trend['real_value']/df_index_trend['real_value'].loc[0]) * 100
+
+df_index_trend.to_excel('data_process/conclusion/predict_data/index_predict_output/trend/rfr_trend_latlong_index.xlsx')

@@ -91,7 +91,9 @@ vif['vif'] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 vif['variable'] = X.columns
 
 #######################################################################################################################
-df_output.to_excel('data_process/conclusion/regression_result/full_with_interactionterm_regression_ols_results_edit.xlsx')
+df_output.to_excel('data_process/conclusion/regression_result/regression_result_last.xlsx')
+vif.to_excel('data_process/conclusion/regression_result/vif_result_last.xlsx')
+print(1)
 
 
 

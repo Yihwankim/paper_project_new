@@ -66,9 +66,9 @@ correlation = []
 mean_ape = []
 r_square2 = []
 
-features = int(np.sqrt(23))  # tree 에 들어가는 변수의 갯수 선정
+features = 8  # tree 에 들어가는 변수의 갯수 선정
 
-model = RandomForestRegressor(n_estimators=100, max_features=features, criterion='mse', random_state=2)
+model = RandomForestRegressor(n_estimators=150, max_features=features, criterion='mse', random_state=2)
 # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
 # max_features: 무작위로 선택할 Feature 의 개수
 # criterion: model 선정 기준_ mse: mean squared error
@@ -78,7 +78,7 @@ model = RandomForestRegressor(n_estimators=100, max_features=features, criterion
 model.fit(x_train, y_train)  # 상기 조건대로 random_forest_regression_model 학습
 
 # 5. model 예측
-x_index = pd.read_excel('data_process/conclusion/summary_full_rfr.xlsx', header=0, skipfooter=0)
+x_index = pd.read_excel('data_process/conclusion/predict_data/index_predict_input/basic/summary_full_rfr.xlsx', header=0, skipfooter=0)
 y_index = model.predict(x_index)  # test sample 의 값을 model 에 넣어 산출한 값
 
 df_index = pd.DataFrame(y_index)
@@ -93,4 +93,23 @@ for i in tqdm(range(length)):
     df_index['index'].loc[i] = (df_index['real_value'].loc[i]/df_index['real_value'].loc[int(i/24)*24]) * 100
 
 
-df_index.to_excel('data_process/conclusion/rfr_index_2.xlsx')
+df_index.to_excel('data_process/conclusion/predict_data/index_predict_output/basic/rfr_basic_full_index.xlsx')
+
+########################################################################################################################
+# 5. model 예측
+x_index = pd.read_excel('data_process/conclusion/predict_data/index_predict_input/trend/with_full_rfr_edit.xlsx', header=0, skipfooter=0)
+y_index = model.predict(x_index)  # test sample 의 값을 model 에 넣어 산출한 값
+
+df_index = pd.DataFrame(y_index)
+df_index.columns = ['raw_value']
+
+df_index['real_value'] = np.exp(df_index['raw_value'])
+
+
+length = 600
+df_index['index'] = 1
+for i in tqdm(range(length)):
+    df_index['index'].loc[i] = (df_index['real_value'].loc[i]/df_index['real_value'].loc[int(i/24)*24]) * 100
+
+
+df_index.to_excel('data_process/conclusion/predict_data/index_predict_output/trend/rfr_trend_full_index.xlsx')
