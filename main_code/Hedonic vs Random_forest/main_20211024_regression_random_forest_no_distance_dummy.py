@@ -65,9 +65,9 @@ correlation = []
 mean_ape = []
 r_square2 = []
 
-features = int(np.sqrt(20))  # tree 에 들어가는 변수의 갯수 선정
+features = 8  # tree 에 들어가는 변수의 갯수 선정
 
-model = RandomForestRegressor(n_estimators=100, max_features=features, criterion='mse', random_state=2)
+model = RandomForestRegressor(n_estimators=150, max_features=features, criterion='mse', random_state=2)
 # n_estimators: 랜덤 포레스트 안의 결정 트리 갯수
 # max_features: 무작위로 선택할 Feature 의 개수
 # criterion: model 선정 기준_ mse: mean squared error
